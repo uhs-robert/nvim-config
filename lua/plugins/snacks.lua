@@ -65,6 +65,7 @@ return {
           unstagedChangesColor = { fg = "lazyUnstagedChanges" },
         },
       },
+      words = { enabled = true },
     },
   },
 }

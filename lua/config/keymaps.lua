@@ -2,6 +2,7 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
+-- local
 -- Change directory to the active file
 vim.keymap.set("n", "<leader>cd", function()
   vim.cmd("cd %:p:h")
