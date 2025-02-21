@@ -3,6 +3,13 @@
 -- Add any additional keymaps here
 
 -- local
+local wk = require("which-key")
+
+-- Fixes for missing icons in which-key
+wk.add({
+  { "<leader>o", desc = "overseer", icon = { icon = "󱢇", color = "red", h1 = "WhichKey" } },
+})
+
 -- Change directory to the active file
 vim.keymap.set("n", "<leader>cd", function()
   vim.cmd("cd %:p:h")
@@ -31,7 +38,7 @@ vim.keymap.set(
 )
 
 --Return to Snacks Dashboard
-vim.keymap.set("n", "<leader>0", function()
+vim.keymap.set("n", "<leader>1", function()
   if vim.bo.filetype == "snacks_dashboard" then
     vim.notify("Hey, you're already here! Welcome home 󰟒", vim.log.levels.INFO, { title = "Dashboard" })
   else
@@ -39,7 +46,10 @@ vim.keymap.set("n", "<leader>0", function()
       require("snacks").dashboard.open()
     end)
   end
-end, { desc = "Home Tab" })
+end, { desc = "Home" })
+wk.add({
+  { "<leader>1", icon = { icon = "", color = "blue", h1 = "WhichKey" } },
+})
 
 -- Github Clone Repository
 vim.keymap.set("n", "<leader>gC", function()
