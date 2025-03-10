@@ -1,12 +1,6 @@
 return {
 
   {
-    "smjonas/inc-rename.nvim",
-    cmd = "IncRename",
-    config = true,
-  },
-
-  {
     "Wansmer/treesj",
     keys = {
       { "J", "<cmd>TSJToggle<cr>", desc = "Join Toggle" },
@@ -29,15 +23,15 @@ return {
     },
   },
 
-  {
-    "RRethy/nvim-treesitter-endwise",
-    event = "BufEnter",
-    config = function()
-      require("nvim-treesitter.configs").setup({
-        endwise = {
-          enable = true,
-        },
-      })
-    end,
-  },
+  -- {
+  --   "RRethy/nvim-treesitter-endwise",
+  --   event = "BufEnter",
+  --   config = function()
+  --     require("nvim-treesitter.configs").setup({
+  --       endwise = {
+  --         enable = true,
+  --       },
+  --     })
+  --   end,
+  -- },
 }
