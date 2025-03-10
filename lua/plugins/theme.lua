@@ -59,6 +59,14 @@ local group_overrides = {
   VertSplit = { fg = c.vscSplitDark, bg = c.none },
   Delimiter = { fg = c.vscSplitDark, bg = c.none },
   FloatTitle = { fg = c.vscFront, bg = c.vscPopupBack },
+
+  -- Git Signs
+  GitSignsAdd = { fg = c.neonGreen, bg = "None" },
+  GitSignsChange = { fg = c.neonBlue, bg = "None" },
+  GitSignsDelete = { fg = c.neonRed, bg = "None" },
+  GitSignsAddLn = { fg = c.vscBack, bg = c.neonGreen },
+  GitSignsChangeLn = { fg = c.vscBack, bg = c.neonBlue },
+  GitSignsDeleteLn = { fg = c.vscBack, bg = c.neonRed },
 }
 
 -- Define custom highlights
