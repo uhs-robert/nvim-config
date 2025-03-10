@@ -1,0 +1,44 @@
+return {
+  {
+    "nvim-neorg/neorg",
+    lazy = false,
+    version = "*",
+    config = function()
+      require("neorg").setup({
+        load = {
+          ["core.defaults"] = {},
+          ["core.dirman"] = {
+            config = {
+              workspaces = {
+                personal = "~/Documents/Notes/personal",
+                work = "~/Documents/Notes/work",
+              },
+              index = "index.norg",
+              default_workspace = "work",
+            },
+          },
+          -- ["core.completion"] = {
+          --   config = {
+          --     engine = "nvim-cmp",
+          --   },
+          -- },
+          ["core.concealer"] = {
+            config = {
+              icon_preset = "diamond",
+            },
+          },
+          ["core.export"] = {},
+          ["core.export.markdown"] = {},
+          -- ["core.latex.renderer"] = {},
+          ["core.presenter"] = {
+            config = {
+              zen_mode = "zen-mode",
+            },
+          },
+          ["core.summary"] = {},
+          ["core.text-objects"] = {},
+        },
+      })
+    end,
+  },
+}
