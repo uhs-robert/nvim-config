@@ -4,6 +4,11 @@
 
 -- local
 local wk = require("which-key")
+local keymap = vim.keymap
+
+-- Movement adjustments
+keymap.set("n", "H", "^", { desc = "Go to beginning of line" })
+keymap.set("n", "L", "g_", { desc = "Go to end of line" })
 
 -- Fixes for missing icons in which-key
 wk.add({
@@ -11,7 +16,7 @@ wk.add({
 })
 
 -- Change directory to the active file
-vim.keymap.set("n", "<leader>cd", function()
+keymap.set("n", "<leader>cd", function()
   vim.cmd("cd %:p:h")
   local cwd = vim.fn.getcwd()
   vim.notify(
@@ -22,23 +27,13 @@ vim.keymap.set("n", "<leader>cd", function()
 end, { noremap = true, silent = true, desc = "Change directory to open file" })
 
 -- Open the current file in the file explorer
-vim.keymap.set(
-  "n",
-  "<leader>fo",
-  ":!dolphin %:p:h<CR>",
-  { noremap = true, silent = true, desc = "Open in file explorer" }
-)
+keymap.set("n", "<leader>fo", ":!dolphin %:p:h<CR>", { noremap = true, silent = true, desc = "Open in file explorer" })
 
 -- Save file without auto-formatting
-vim.keymap.set(
-  "n",
-  "<leader>fs",
-  ":noautocmd w<CR>",
-  { noremap = true, silent = true, desc = "Save file (no formatting)" }
-)
+keymap.set("n", "<leader>fs", ":noautocmd w<CR>", { noremap = true, silent = true, desc = "Save file (no formatting)" })
 
 --Return to Snacks Dashboard
-vim.keymap.set("n", "<leader>1", function()
+keymap.set("n", "<leader>1", function()
   if vim.bo.filetype == "snacks_dashboard" then
     vim.notify("Hey, you're already here! Welcome home 󰟒", vim.log.levels.INFO, { title = "Dashboard" })
   else
@@ -52,7 +47,7 @@ wk.add({
 })
 
 -- Github Clone Repository
-vim.keymap.set("n", "<leader>gC", function()
+keymap.set("n", "<leader>gC", function()
   local default_clone_dir = "~/Documents/github-uphill/"
   local url = vim.fn.input("Git Repository URL: ")
   local path = vim.fn.input(string.format("Clone to Directory (default: %s): ", default_clone_dir))
@@ -83,14 +78,24 @@ vim.keymap.set("n", "<leader>gC", function()
   end
 end, { desc = "Clone Git Repository" })
 
---Inc-Rename
-vim.keymap.set("n", "<leader>rn", ":IncRename", { desc = "Rename (from scratch)" })
-vim.keymap.set("n", "<leader>rN", function()
-  return ":IncRename " .. vim.fn.expand("<cword>")
-end, { expr = true, desc = "Rename (from word)" })
+-- Find and Replace (without confirmation)
+vim.keymap.set("v", "<leader>rn", '"hy:%s/<C-r>h//g<left><left>', { desc = "Rename selected text" })
+vim.keymap.set("n", "<leader>rn", ":%s/<C-r>=expand('<cword>')<CR>//g<left><left>", { desc = "Rename current word" })
+
+-- Find and Replace (with confirmation)
+vim.keymap.set("v", "<leader>rN", '"hy:%s/<C-r>h//gc<left><left>', { desc = "Rename selected text with confirmation" })
+vim.keymap.set(
+  "n",
+  "<leader>rN",
+  ":%s/<C-r>=expand('<cword>')<CR>//gc<left><left><left>",
+  { desc = "Rename current word with confirmation" }
+)
+
+-- Sort selected lines
+vim.keymap.set("v", "<leader>rS", ":sort<CR>", { desc = "Sort selected lines" })
 
 --Telescope (Hidden Files)
-vim.keymap.set(
+keymap.set(
   "n",
   "<leader>fh",
   ":Telescope find_files hidden=true<CR>",
@@ -99,22 +104,22 @@ vim.keymap.set(
 
 --Snacks Explorer
 ---Find visible files
-vim.keymap.set("n", "<leader>e", function()
+keymap.set("n", "<leader>e", function()
   require("snacks.explorer").open({ hidden = false, cwd = LazyVim.root() })
 end, { noremap = true, silent = true, desc = "Explorer Snacks (root)" })
-vim.keymap.set("n", "<leader>E", function()
+keymap.set("n", "<leader>E", function()
   require("snacks.explorer").open({ hidden = false, cwd = vim.fn.getcwd() })
 end, { noremap = true, silent = true, desc = "Explorer Snacks (cwd)" })
 ---Find hidden files
-vim.keymap.set("n", "<leader>fe", function()
+keymap.set("n", "<leader>fe", function()
   require("snacks.explorer").open({ hidden = true, cwd = LazyVim.root() })
 end, { noremap = true, silent = true, desc = "Explorer Snacks (root -hidden)" })
-vim.keymap.set("n", "<leader>fE", function()
+keymap.set("n", "<leader>fE", function()
   require("snacks.explorer").open({ hidden = true, cwd = vim.fn.getcwd() })
 end, { noremap = true, silent = true, desc = "Explorer Snacks (cwd -hidden)" })
 
 --Navigate vim panes better
-vim.keymap.set("n", "<c-h>", ":wincmd h<CR>")
-vim.keymap.set("n", "<c-j>", ":wincmd j<CR>")
-vim.keymap.set("n", "<c-k>", ":wincmd k<CR>")
-vim.keymap.set("n", "<c-l>", ":wincmd l<CR>")
+keymap.set("n", "<c-h>", ":wincmd h<CR>")
+keymap.set("n", "<c-j>", ":wincmd j<CR>")
+keymap.set("n", "<c-k>", ":wincmd k<CR>")
+keymap.set("n", "<c-l>", ":wincmd l<CR>")
