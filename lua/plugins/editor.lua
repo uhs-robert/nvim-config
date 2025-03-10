@@ -48,6 +48,10 @@ return {
   {
     "chrisgrieser/nvim-various-textobjs",
     event = "InsertEnter",
-    opts = { useDefaultKeymaps = true },
+    opts = {
+      keymaps = {
+        useDefaults = true,
+      },
+    },
   },
 }
