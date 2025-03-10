@@ -26,8 +26,17 @@ return {
   },
 
   {
-    "m4xshen/hardtime.nvim",
-    dependencies = { "MunifTanjim/nui.nvim" },
+    "notjedi/nvim-rooter.lua",
+    config = function()
+      require("nvim-rooter").setup()
+    end,
+  },
+
+  {
+    "stevearc/oil.nvim",
     opts = {},
+    dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+    lazy = false,
   },
 }
