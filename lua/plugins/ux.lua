@@ -54,11 +54,17 @@ return {
       },
       {
         "<leader>yh",
-        -- mode = { "n", "v" },
         function()
           require("yazi").yazi(nil, "~")
         end,
-        desc = "Open Yazi from home dir and return to previous cwd",
+        desc = "Open Yazi from home directory",
+      },
+      {
+        "<leader>ym",
+        function()
+          require("yazi").yazi(nil, "~/.sshfs")
+        end,
+        desc = "Open Yazi from mounted directory",
       },
       {
         -- Open in the current working directory
