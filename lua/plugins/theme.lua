@@ -98,13 +98,13 @@ local extendTheme = {
   --lazySelectedLine = { bg = "lazySelectedLine" },
   lazyUnstagedChanges = { fg = "#ff5555" },
 
-  -- Render Markdown Heading Backgrounds (color-coded)
-  Headline1Bg = { bg = c.neonBlue, fg = c.vscFront, bold = true }, -- Blue
-  Headline2Bg = { bg = c.vscUiOrange, fg = c.vscBack, bold = true }, -- Orange
-  Headline3Bg = { bg = c.vscDarkYellow, fg = c.vscBack, bold = true }, -- Yellow
-  Headline4Bg = { bg = c.neonGreen, fg = c.vscBack, bold = true }, -- Green
-  Headline5Bg = { bg = c.neonCyan, fg = c.vscBack, bold = true }, -- Cyan
-  Headline6Bg = { bg = c.neonPink, fg = c.vscBack, bold = true }, -- Pink
+  -- Render Markdown Headings (color-coded)
+  MarkdownHeadlineH1 = { bg = "#1c3d5a", fg = "#4FC1FF", bold = true }, -- Neon Blue
+  MarkdownHeadlineH2 = { bg = "#5a3e22", fg = "#FF8C42", bold = true }, -- Neon Orange
+  MarkdownHeadlineH3 = { bg = "#665c1e", fg = "#FFD700", bold = true }, -- Bright Gold
+  MarkdownHeadlineH4 = { bg = "#234c3a", fg = "#39FF14", bold = true }, -- Neon Green
+  MarkdownHeadlineH5 = { bg = "#274e54", fg = "#00FFFF", bold = true }, -- Neon Cyan
+  MarkdownHeadlineH6 = { bg = "#4e2a4e", fg = "#FF10F0", bold = true }, -- Neon Pink
 }
 
 -- Custom terminal colors
