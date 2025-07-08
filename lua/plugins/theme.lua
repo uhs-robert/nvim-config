@@ -97,6 +97,14 @@ local extendTheme = {
   --lazySearchingBorder = { fg = "lazySearchingBorder", bold = true },
   --lazySelectedLine = { bg = "lazySelectedLine" },
   lazyUnstagedChanges = { fg = "#ff5555" },
+
+  -- Render Markdown Heading Backgrounds (color-coded)
+  Headline1Bg = { bg = c.neonBlue, fg = c.vscFront, bold = true }, -- Blue
+  Headline2Bg = { bg = c.vscUiOrange, fg = c.vscBack, bold = true }, -- Orange
+  Headline3Bg = { bg = c.vscDarkYellow, fg = c.vscBack, bold = true }, -- Yellow
+  Headline4Bg = { bg = c.neonGreen, fg = c.vscBack, bold = true }, -- Green
+  Headline5Bg = { bg = c.neonCyan, fg = c.vscBack, bold = true }, -- Cyan
+  Headline6Bg = { bg = c.neonPink, fg = c.vscBack, bold = true }, -- Pink
 }
 
 -- Custom terminal colors
