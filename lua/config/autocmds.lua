@@ -29,3 +29,31 @@ api.nvim_create_autocmd("FileType", {
     vim.keymap.set("n", "<Esc>", ":quit<CR>", { buffer = true, silent = true })
   end,
 })
+
+-- Add the relative file path from nearest git root to code files
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = { "*.ts", "*.tsx", "*.js", "*.jsx" },
+  callback = function(args)
+    local bufnr = args.buf
+    local filepath = args.file
+
+    -- Get Git root
+    local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+    if not git_root or git_root == "" then
+      return
+    end
+
+    -- Compute relative path and comment
+    local relpath = filepath:gsub("^" .. git_root .. "/", "")
+    local comment = "// " .. relpath
+
+    -- Check if it's already the first line
+    local first_line = vim.api.nvim_buf_get_lines(bufnr, 0, 1, false)[1]
+    if first_line == comment then
+      return
+    end
+
+    -- Insert at the top
+    vim.api.nvim_buf_set_lines(bufnr, 0, 0, false, { comment })
+  end,
+})
