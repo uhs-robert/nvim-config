@@ -100,7 +100,8 @@ return {
   -- Smarter w, e, b motions that ignore insignificant punctuation for cleaner navigation
   {
     "chrisgrieser/nvim-spider",
-    event = "ModeChanged",
+    lazy = true,
+    event = "VeryLazy",
     keys = {
       { "w", "<cmd>lua require('spider').motion('w')<cr>", mode = { "n", "x", "o" } },
       { "e", "<cmd>lua require('spider').motion('e')<cr>", mode = { "n", "x", "o" } },
@@ -115,7 +116,8 @@ return {
   -- Provides extra text objects like entire buffer, visible area, URLs, numbers, etc.
   {
     "chrisgrieser/nvim-various-textobjs",
-    event = "InsertEnter",
+    lazy = true,
+    event = "VeryLazy",
     opts = {
       keymaps = {
         useDefaults = true,

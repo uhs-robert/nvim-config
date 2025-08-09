@@ -5,6 +5,8 @@ return {
   -- Provides side-by-side diff views, merge conflict resolution, and git history browsing
   {
     "sindrets/diffview.nvim",
+    lazy = true,
+    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory" },
     enabled = true,
     config = function()
       require("diffview").setup()
@@ -15,6 +17,7 @@ return {
   -- Opens GitHub URLs, files, and line numbers directly from Neovim with <leader>gw
   {
     "tetzng/open-github-url.nvim",
+    lazy = true,
 
     -- recommended
     keys = {

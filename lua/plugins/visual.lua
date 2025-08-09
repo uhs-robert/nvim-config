@@ -1,6 +1,14 @@
 -- Visual enhancements and appearance customization
 -- Contains scrollbars, colorizers, statusline customizations, and visual polish plugins
-local colors = require("tokyonight.colors").setup()
+local colors = {
+  cyan = "#7dcfff",
+  orange = "#ff9e64",
+  error = "#f7768e",
+  warning = "#e0af68",
+  info = "#7aa2f7",
+  hint = "#1abc9c",
+  purple = "#bb9af7",
+}
 return {
   -- Scrollbar: Visual scrollbar with search and diagnostic markers
   -- Shows scroll position, search results, git changes, and LSP diagnostics in the gutter
@@ -30,6 +38,8 @@ return {
   -- Improves the appearance of completion popups with color coding
   {
     "xzbdmw/colorful-menu.nvim",
+    lazy = true,
+    event = "InsertEnter",
     config = function()
       -- You don't need to set these options.
       require("colorful-menu").setup({})
@@ -54,6 +64,8 @@ return {
   -- Provides additional syntax highlighting patterns, with hex color background disabled
   {
     "echasnovski/mini.hipatterns",
+    lazy = true,
+    event = "BufReadPost",
     config = function()
       require("mini.hipatterns").setup({
         highlighters = {

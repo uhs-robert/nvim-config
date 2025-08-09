@@ -30,6 +30,7 @@ return {
   -- Provides :Shades and :Huefy commands for color manipulation and selection
   {
     "nvzone/minty",
+    lazy = true,
     cmd = { "Shades", "Huefy" },
   },
 
@@ -69,6 +70,8 @@ return {
   -- Changes working directory to project root based on common markers (.git, package.json)
   {
     "notjedi/nvim-rooter.lua",
+    lazy = true,
+    event = "VeryLazy",
     config = function()
       require("nvim-rooter").setup()
     end,
@@ -76,13 +79,13 @@ return {
 
   -- Oil: File manager that treats directories as editable buffers
   -- Edit directories like normal buffers with familiar Vim commands and motions
-  {
-    "stevearc/oil.nvim",
-    opts = {},
-    dependencies = { { "echasnovski/mini.icons", opts = {} } },
-    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
-    lazy = false,
-  },
+  -- {
+  --   "stevearc/oil.nvim",
+  --   opts = {},
+  --   dependencies = { { "echasnovski/mini.icons", opts = {} } },
+  --   -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+  --   lazy = false,
+  -- },
 
   -- Yazi: Terminal file manager integration with advanced file operations
   -- Fast file navigation, preview, and batch operations with multiple keybinding options
