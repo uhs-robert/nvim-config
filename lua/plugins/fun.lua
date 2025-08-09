@@ -1,10 +1,16 @@
+-- Fun and recreational plugins
+-- Contains games, typing practice, and entertainment features for Neovim
 return {
+  -- Typr: Typing speed test and practice game
+  -- Built-in typing game with statistics tracking, commands: :Typr, :TyprStats
   {
     "nvzone/typr",
     dependencies = "nvzone/volt",
     opts = {},
     cmd = { "Typr", "TyprStats" },
   },
+  -- Player One: Sound effects for typing (currently disabled)
+  -- Adds retro gaming sound effects to keystrokes with customizable themes
   -- {
   --   "jackplus-xyz/player-one.nvim",
   --   opts = {

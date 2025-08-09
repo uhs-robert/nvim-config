@@ -1,4 +1,8 @@
+-- Language Server Protocol configurations and enhancements
+-- Contains LSP-related plugins for code navigation, previews, and server settings
 return {
+  -- Goto Preview: Floating window previews for LSP definitions
+  -- Shows definitions, implementations, references in popup windows without leaving current location
   { -- plugin config for goto-preview
     "rmagatti/goto-preview",
     event = "LspAttach",
@@ -7,6 +11,8 @@ return {
     end,
   },
 
+  -- LSP Config: Extended TypeScript server configuration
+  -- Enhances LazyVim's LSP setup with TypeScript inlay hints and custom filetypes
   { -- extend LazyVim's LSP setup
     "neovim/nvim-lspconfig",
     opts = {

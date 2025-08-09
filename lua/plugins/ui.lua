@@ -1,5 +1,9 @@
+-- User interface enhancements and visual improvements
+-- Contains scrollbars, colorizers, statusline customizations, and UI polish plugins
 local colors = require("tokyonight.colors").setup()
 return {
+  -- Scrollbar: Visual scrollbar with search and diagnostic markers
+  -- Shows scroll position, search results, git changes, and LSP diagnostics in the gutter
   {
     "petertriho/nvim-scrollbar",
     config = function()
@@ -22,6 +26,8 @@ return {
     end,
   },
 
+  -- Colorful Menu: Enhanced completion menu with better visual distinction
+  -- Improves the appearance of completion popups with color coding
   {
     "xzbdmw/colorful-menu.nvim",
     config = function()
@@ -30,6 +36,8 @@ return {
     end,
   },
 
+  -- Colorizer: Live color preview for CSS colors, hex codes, and color functions
+  -- Shows background colors for hex codes, CSS colors, and color function calls
   {
     "catgoose/nvim-colorizer.lua",
     event = "BufReadPre",
@@ -42,6 +50,8 @@ return {
     },
   },
 
+  -- Mini HiPatterns: Pattern-based syntax highlighting (hex colors disabled)
+  -- Provides additional syntax highlighting patterns, with hex color background disabled
   {
     "echasnovski/mini.hipatterns",
     config = function()
@@ -53,6 +63,8 @@ return {
     end,
   },
 
+  -- Lualine: Enhanced statusline with time display and file manager integration
+  -- Custom statusline showing time and clickable file path that opens Dolphin file manager
   {
     "nvim-lualine/lualine.nvim",
     opts = function(_, opts)

@@ -1,3 +1,5 @@
+-- Temporary and experimental plugin configurations
+-- Contains commented-out plugins for testing, evaluation, or temporary disabling
 -- -- https://github.com/vim-test/vim-test
 return {
   {

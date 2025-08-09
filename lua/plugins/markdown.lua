@@ -1,4 +1,8 @@
+-- Markdown rendering and enhancement tools
+-- Contains plugins for beautiful markdown preview, syntax highlighting, and callout support
 return {
+  -- Render Markdown: Beautiful in-buffer markdown rendering with syntax highlighting
+  -- Renders headings, lists, code blocks, callouts, and checkboxes with custom icons and colors
   {
     "MeanderingProgrammer/render-markdown.nvim",
     enabled = true,

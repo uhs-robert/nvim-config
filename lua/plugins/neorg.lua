@@ -1,4 +1,8 @@
+-- Neorg note-taking and organization system (currently disabled)
+-- Advanced note-taking plugin with structured markup, task management, and presentation features
 return {
+  -- Neorg: Comprehensive note-taking and organization system with structured markup
+  -- Features workspaces, task management, exports, presentations, and advanced text objects
   -- {
   --   "nvim-neorg/neorg",
   --   lazy = false,

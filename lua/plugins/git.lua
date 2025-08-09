@@ -1,4 +1,8 @@
+-- Git integration and version control tools
+-- Contains plugins for git diffs, signs, GitHub integration, and repository management
 return {
+  -- DiffView: Advanced git diff and merge tool
+  -- Provides side-by-side diff views, merge conflict resolution, and git history browsing
   {
     "sindrets/diffview.nvim",
     enabled = true,
@@ -7,6 +11,8 @@ return {
     end,
   },
 
+  -- Open GitHub URL: Quick navigation to GitHub from code
+  -- Opens GitHub URLs, files, and line numbers directly from Neovim with <leader>gw
   {
     "tetzng/open-github-url.nvim",
 
@@ -24,6 +30,8 @@ return {
     end,
   },
 
+  -- GitSigns: Git status in the sign column
+  -- Shows git changes, additions, deletions in the gutter with navigation keymaps
   {
     "lewis6991/gitsigns.nvim",
     event = { "BufReadPre", "BufNewFile" },

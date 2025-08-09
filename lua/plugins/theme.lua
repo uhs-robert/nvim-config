@@ -1,3 +1,5 @@
+-- VSCode theme with custom color overrides and branding
+-- Custom dark theme based on VSCode with neon accent colors and UpHill Solutions styling
 --https://github.com/Mofiqul/vscode.nvim
 ---@diagnostic disable: undefined-global
 
@@ -136,6 +138,8 @@ local set_terminal_colors = function()
 end
 
 return {
+  -- VSCode Theme: Dark theme with extensive customization and neon accent colors
+  -- Features custom dashboard colors, git signs, markdown headings, and terminal colors
   {
     "Mofiqul/vscode.nvim",
     lazy = false,

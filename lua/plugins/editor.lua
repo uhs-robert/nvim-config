@@ -1,5 +1,9 @@
+-- Core editor enhancements and productivity tools
+-- Contains plugins for folding, undo management, centering, text objects, and editor behavior improvements
 return {
 
+  -- UFO: Advanced folding with treesitter and LSP integration
+  -- Provides intelligent code folding with peek functionality and custom fold levels
   {
     "kevinhwang91/nvim-ufo",
     dependencies = "kevinhwang91/promise-async",
@@ -34,6 +38,8 @@ return {
     end,
   },
 
+  -- Undotree: Visual undo history browser
+  -- Navigate through undo/redo history with a tree-like interface, toggle with <leader>U
   {
     "jiaoshijie/undotree",
     dependencies = "nvim-lua/plenary.nvim",
@@ -43,6 +49,8 @@ return {
     },
   },
 
+  -- No Neck Pain: Center buffer content for comfortable reading
+  -- Centers content in the middle of the screen with configurable width (150 chars)
   {
     "shortcuts/no-neck-pain.nvim",
     version = "*",
@@ -58,10 +66,14 @@ return {
     end,
   },
 
+  -- Pretty Fold: Enhanced fold text display
+  -- Improves the appearance of folded code blocks with better formatting
   {
     "anuvyklack/pretty-fold.nvim",
   },
 
+  -- Spider: Enhanced word movement that skips punctuation
+  -- Smarter w, e, b motions that ignore insignificant punctuation for cleaner navigation
   {
     "chrisgrieser/nvim-spider",
     event = "ModeChanged",
@@ -75,6 +87,8 @@ return {
     },
   },
 
+  -- Various Text Objects: Additional text objects for enhanced editing
+  -- Provides extra text objects like entire buffer, visible area, URLs, numbers, etc.
   {
     "chrisgrieser/nvim-various-textobjs",
     event = "InsertEnter",

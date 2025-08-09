@@ -8,7 +8,11 @@ local header = [[
 ██████  █████████████████████ ████ █████ █████ ████ ██████
 ]]
 
+-- Snacks.nvim configuration and dashboard customization
+-- Contains treesitter parsers and custom Snacks dashboard with UpHill Solutions branding
 return {
+  -- Treesitter: Syntax highlighting and parsing engine
+  -- Extended parser list for better syntax support across multiple languages
   -- add more treesitter parsers
   {
     "nvim-treesitter/nvim-treesitter",
@@ -33,6 +37,8 @@ return {
     },
   },
 
+  -- Snacks: Multi-purpose UI and utility plugin with dashboard, lazygit integration, and word highlighting
+  -- Custom dashboard with UpHill Solutions branding, lazygit theming, and enhanced word navigation
   -- lazy.nvim
   {
     "folke/snacks.nvim",

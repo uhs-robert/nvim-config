@@ -1,4 +1,8 @@
+-- AI-powered coding assistance and chat interfaces
+-- Contains configurations for AI tools that provide code suggestions, explanations, and interactive chat
 return {
+  -- CodeCompanion: Interactive AI chat interface with support for multiple LLM providers (Ollama, Claude)
+  -- Provides code explanation, fixing, testing, and commit message generation
   -- {
   --   "olimorris/codecompanion.nvim",
   --   dependencies = {
@@ -45,6 +49,8 @@ return {
   --   end,
   -- },
 
+  -- Avante: Advanced AI coding assistant with inline suggestions and chat functionality
+  -- Supports multiple providers (Ollama, Claude) with image pasting and markdown rendering
   -- {
   --   "yetone/avante.nvim",
   --   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
