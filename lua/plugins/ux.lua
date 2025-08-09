@@ -1,4 +1,8 @@
+-- User experience and workflow enhancements
+-- Contains navigation, file management, scrolling, and productivity tools
 return {
+  -- Tmux Navigator: Seamless navigation between Vim and tmux panes
+  -- Navigate between Vim splits and tmux panes using consistent keybindings (Ctrl+hjkl)
   {
     "christoomey/vim-tmux-navigator", -- tmux navigation for vim and neovim, also supports tmux-res'
     cmd = {
@@ -18,13 +22,19 @@ return {
     },
   },
 
+  -- Volt: Base dependency for NVZone plugins (lazy loaded)
+  -- Required dependency for typr and other NVZone utilities
   { "nvzone/volt", lazy = true },
 
+  -- Minty: Color picker and shade generator tools
+  -- Provides :Shades and :Huefy commands for color manipulation and selection
   {
     "nvzone/minty",
     cmd = { "Shades", "Huefy" },
   },
 
+  -- Neoscroll: Smooth scrolling animations for better visual feedback
+  -- Provides smooth scrolling for Ctrl+u/d, Ctrl+b/f, and other scroll commands
   {
     "karb94/neoscroll.nvim",
     opts = {
@@ -55,6 +65,8 @@ return {
     },
   },
 
+  -- Rooter: Automatic project root detection and directory changing
+  -- Changes working directory to project root based on common markers (.git, package.json)
   {
     "notjedi/nvim-rooter.lua",
     config = function()
@@ -62,6 +74,8 @@ return {
     end,
   },
 
+  -- Oil: File manager that treats directories as editable buffers
+  -- Edit directories like normal buffers with familiar Vim commands and motions
   {
     "stevearc/oil.nvim",
     opts = {},
@@ -70,6 +84,8 @@ return {
     lazy = false,
   },
 
+  -- Yazi: Terminal file manager integration with advanced file operations
+  -- Fast file navigation, preview, and batch operations with multiple keybinding options
   {
     "mikavilpas/yazi.nvim",
     event = "VeryLazy",
@@ -92,7 +108,7 @@ return {
       {
         "<leader>ym",
         function()
-          require("yazi").yazi(nil, "~/.sshfs")
+          require("yazi").yazi(nil, "~/mnt")
         end,
         desc = "Open Yazi from mounted directory",
       },
