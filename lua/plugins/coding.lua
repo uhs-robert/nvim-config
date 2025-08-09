@@ -9,9 +9,14 @@ return {
   },
 
   {
-    "uhs-robert/nvim-ssh",
-    dependencies = { "nvim-telescope/telescope.nvim" },
-    opts = {},
+    "uhs-robert/sshfs.nvim",
+    opts = {
+      ui = {
+        file_picker = {
+          preferred_picker = "yazi",
+        },
+      },
+    },
   },
 
   {
