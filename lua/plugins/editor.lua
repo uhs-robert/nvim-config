@@ -1,6 +1,30 @@
 -- Core editor enhancements and productivity tools
--- Contains plugins for folding, undo management, centering, text objects, and editor behavior improvements
+-- Contains plugins for folding, undo management, centering, text objects, syntax parsing, and editor behavior improvements
 return {
+
+  -- Treesitter: Syntax highlighting and parsing engine
+  -- Extended parser list for better syntax support across multiple languages
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = {
+        "bash",
+        "html",
+        "javascript",
+        "json",
+        "lua",
+        "markdown",
+        "markdown_inline",
+        "python",
+        "query",
+        "regex",
+        "tsx",
+        "typescript",
+        "vim",
+        "yaml",
+      },
+    },
+  },
 
   -- UFO: Advanced folding with treesitter and LSP integration
   -- Provides intelligent code folding with peek functionality and custom fold levels
@@ -97,5 +121,12 @@ return {
         useDefaults = true,
       },
     },
+  },
+
+  -- HelpView: Enhanced help documentation with better formatting and syntax highlighting
+  -- Improves the appearance and readability of Neovim's built-in help files
+  {
+    "OXY2DEV/helpview.nvim",
+    lazy = false,
   },
 }

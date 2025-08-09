@@ -1,5 +1,5 @@
--- User experience and workflow enhancements
--- Contains navigation, file management, scrolling, and productivity tools
+-- Navigation and file management tools
+-- Contains tmux navigation, file managers, scrolling, and workflow productivity tools
 return {
   -- Tmux Navigator: Seamless navigation between Vim and tmux panes
   -- Navigate between Vim splits and tmux panes using consistent keybindings (Ctrl+hjkl)

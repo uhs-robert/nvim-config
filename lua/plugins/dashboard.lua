@@ -8,38 +8,11 @@ local header = [[
 ██████  █████████████████████ ████ █████ █████ ████ ██████
 ]]
 
--- Snacks.nvim configuration and dashboard customization
--- Contains treesitter parsers and custom Snacks dashboard with UpHill Solutions branding
+-- Dashboard configuration and startup screen customization
+-- Contains Snacks.nvim dashboard setup with UpHill Solutions branding and custom theming
 return {
-  -- Treesitter: Syntax highlighting and parsing engine
-  -- Extended parser list for better syntax support across multiple languages
-  -- add more treesitter parsers
-  {
-    "nvim-treesitter/nvim-treesitter",
-
-    opts = {
-      ensure_installed = {
-        "bash",
-        "html",
-        "javascript",
-        "json",
-        "lua",
-        "markdown",
-        "markdown_inline",
-        "python",
-        "query",
-        "regex",
-        "tsx",
-        "typescript",
-        "vim",
-        "yaml",
-      },
-    },
-  },
-
   -- Snacks: Multi-purpose UI and utility plugin with dashboard, lazygit integration, and word highlighting
   -- Custom dashboard with UpHill Solutions branding, lazygit theming, and enhanced word navigation
-  -- lazy.nvim
   {
     "folke/snacks.nvim",
     opts = {

@@ -1,5 +1,5 @@
--- User interface enhancements and visual improvements
--- Contains scrollbars, colorizers, statusline customizations, and UI polish plugins
+-- Visual enhancements and appearance customization
+-- Contains scrollbars, colorizers, statusline customizations, and visual polish plugins
 local colors = require("tokyonight.colors").setup()
 return {
   -- Scrollbar: Visual scrollbar with search and diagnostic markers
