@@ -1,3 +1,4 @@
+-- lua/plugins/navigation.lua
 -- Navigation and file management tools
 -- Contains tmux navigation, file managers, scrolling, and workflow productivity tools
 return {
@@ -146,5 +147,14 @@ return {
       -- vim.g.loaded_netrw = 1
       vim.g.loaded_netrwPlugin = 1
     end,
+  },
+  -- Fzf lua
+  {
+    "ibhagwan/fzf-lua",
+    -- optional for icon support
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    -- or if using mini.icons/mini.nvim
+    -- dependencies = { "echasnovski/mini.icons" },
+    opts = {},
   },
 }

@@ -1,3 +1,4 @@
+-- lua/config/keymaps.lua
 -- Keymaps are automatically loaded on the VeryLazy event
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
@@ -6,13 +7,32 @@
 local wk = require("which-key")
 local keymap = vim.keymap
 
+-- disable keymaps
+keymap.del("n", "<leader><tab>l")
+keymap.del("n", "<leader><tab>]")
+keymap.del("n", "<leader><tab>[")
+
+-- Tab Settings
+keymap.set("n", "<leader><tab>l", "<cmd>tabnext<cr>", { desc = "Next tab" })
+
 -- Movement adjustments
-keymap.set("n", "H", "^", { desc = "Go to beginning of line" })
-keymap.set("n", "L", "g_", { desc = "Go to end of line" })
+keymap.set({ "n", "v" }, "H", "^", { desc = "Go to beginning of line" })
+keymap.set({ "n", "v" }, "L", "$g_", { desc = "Go to end of line" })
+-- keymap.set("n", "J", "30j zz", { desc = "Move down by n spaces" })
+-- keymap.set("n", "K", "30k zz", { desc = "Move down by n spaces" })
+
+-- % Modifications
+keymap.set("n", "mm", "%") -- Jump to matching pair
+keymap.set("x", "m", "%") -- Select to matching pair
+keymap.set("o", "m", "%") -- Delete until matching pair
+
+-- Visual mode paste without overwriting the unnamed register
+keymap.set("x", "p", '"_dP', { desc = "Paste without replacing register" })
 
 -- Fixes for missing icons in which-key
 wk.add({
   { "<leader>o", desc = "overseer", icon = { icon = "󱢇", color = "red", h1 = "WhichKey" } },
+  { "<leader>y", desc = "yazi", icon = { icon = "󰇥", color = "cyan", h1 = "WhichKey" } },
 })
 
 -- Change directory to the active file
@@ -27,15 +47,25 @@ keymap.set("n", "<leader>cd", function()
 end, { noremap = true, silent = true, desc = "Change directory to open file" })
 
 -- Open the current file in the file explorer
-keymap.set("n", "<leader>fo", ":!dolphin %:p:h<CR>", { noremap = true, silent = true, desc = "Open in file explorer" })
+keymap.set(
+  "n",
+  "<leader>fo",
+  "<cmd>:!dolphin %:p:h<cr>",
+  { noremap = true, silent = true, desc = "Open in file explorer" }
+)
 
 -- Save file without auto-formatting
-keymap.set("n", "<leader>fs", ":noautocmd w<CR>", { noremap = true, silent = true, desc = "Save file (no formatting)" })
+keymap.set(
+  "n",
+  "<leader>fs",
+  "<cmd>noautocmd w<cr>",
+  { noremap = true, silent = true, desc = "Save file (no formatting)" }
+)
 
 --Return to Snacks Dashboard
 keymap.set("n", "<leader>1", function()
   if vim.bo.filetype == "snacks_dashboard" then
-    vim.notify("Hey, you're already here! Welcome home 󰟒", vim.log.levels.INFO, { title = "Dashboard" })
+    vim.notify("Hey, you're already here! Welcome home 󰟒", vim.log.levels.INFO, { titlekeym = "Dashboard" })
   else
     pcall(function()
       require("snacks").dashboard.open()
@@ -67,13 +97,13 @@ keymap.set("n", "<leader>gC", function()
       local repo_folder = path .. "/" .. (url:match(".*/(.*).git$") or "repo")
       if vim.fn.isdirectory(repo_folder) == 1 then
         vim.cmd("cd " .. repo_folder)
-        vim.notify("✅ Cloned and changed directory to: " .. repo_folder, vim.log.levels.INFO)
+        vim.notify("Cloned and changed directory to: " .. repo_folder, vim.log.levels.INFO)
       else
         vim.cmd("cd " .. path)
-        vim.notify("✅ Cloned and changed directory to: " .. path, vim.log.levels.INFO)
+        vim.notify("Cloned and changed directory to: " .. path, vim.log.levels.INFO)
       end
     else
-      vim.notify("❌ Error cloning repository:\n" .. result, vim.log.levels.ERROR)
+      vim.notify("Error cloning repository:\n" .. result, vim.log.levels.ERROR)
     end
   end
 end, { desc = "Clone Git Repository" })
@@ -92,7 +122,7 @@ vim.keymap.set(
 )
 
 -- Sort selected lines
-vim.keymap.set("v", "<leader>rS", ":sort<CR>", { desc = "Sort selected lines" })
+vim.keymap.set("v", "<leader>rS", "<cmd>sort<cr>", { desc = "Sort selected lines" })
 
 --Telescope (Hidden Files)
 keymap.set(
@@ -119,7 +149,54 @@ keymap.set("n", "<leader>fE", function()
 end, { noremap = true, silent = true, desc = "Explorer Snacks (cwd -hidden)" })
 
 --Navigate vim panes better
-keymap.set("n", "<c-h>", ":wincmd h<CR>")
-keymap.set("n", "<c-j>", ":wincmd j<CR>")
-keymap.set("n", "<c-k>", ":wincmd k<CR>")
-keymap.set("n", "<c-l>", ":wincmd l<CR>")
+-- keymap.set("n", "<c-h>", "<cmd>wincmd h<cr>")
+-- keymap.set("n", "<c-j>", "<cmd>wincmd j<cr>")
+-- keymap.set("n", "<c-k>", "<cmd>wincmd k<cr>")
+-- keymap.set("n", "<c-l>", "<cmd>wincmd l<cr>")
+
+-- -- Mouse click to inspect highlight colors
+-- local function highlight_inspect()
+--   local syn_id = vim.fn.synID(vim.fn.line("."), vim.fn.col("."), 1)
+--   local name = vim.fn.synIDattr(syn_id, "name")
+--   local linked = vim.fn.synIDattr(vim.fn.synIDtrans(syn_id), "name")
+--
+--   -- Optional: include Tree-sitter capture (if available)
+--   local ts_cap = nil
+--   local ok_ts, ts = pcall(require, "vim.treesitter")
+--   if ok_ts then
+--     local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+--     local caps = ts.get_captures_at_pos(0, row - 1, col - 1)
+--     if caps and #caps > 0 then
+--       ts_cap = caps[#caps].capture
+--     end
+--   end
+--
+--   local msg = ("Syntax: %s  →  Highlight: %s%s"):format(
+--     name ~= "" and name or "∅",
+--     linked ~= "" and linked or "∅",
+--     ts_cap and ("  |  TS: @" .. ts_cap) or ""
+--   )
+--
+--   local ok_noice, noice = pcall(require, "noice")
+--   if ok_noice then
+--     noice.notify(msg, "info", { title = "Highlight Inspect" })
+--   else
+--     vim.notify(msg, vim.log.levels.INFO, { title = "Highlight Inspect" })
+--   end
+-- end
+--
+-- -- 3) Click to show (normal mode). Fires after the cursor moves.
+-- vim.keymap.set("n", "<LeftMouse>", function()
+--   if vim.v.mouse_winid ~= 0 then
+--     highlight_inspect()
+--   end
+-- end, { desc = "Click to show highlight group", silent = true })
+--
+-- -- Optional alternative: right click instead of left
+-- -- vim.keymap.set('n', '<RightRelease>', function()
+-- --   if vim.v.mouse_winid ~= 0 then highlight_inspect() end
+-- -- end, { silent = true })
+-- --
+
+-- Fzf Lua
+keymap.set("n", "<leader>f/", ":FzfLua<CR>")

@@ -1,3 +1,4 @@
+-- lua/plugins/editor.lua
 -- Core editor enhancements and productivity tools
 -- Contains plugins for folding, undo management, centering, text objects, syntax parsing, and editor behavior improvements
 return {

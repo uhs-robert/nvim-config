@@ -1,3 +1,4 @@
+-- lua/plugins/lsp.lua
 -- Language Server Protocol configurations and enhancements
 -- Contains LSP-related plugins for code navigation, previews, and server settings
 return {
@@ -17,6 +18,13 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
+        phpactor = {
+          language_server = {
+            workspace = {
+              stubs = { "wordpress" },
+            },
+          },
+        },
         tsserver = {
           init_options = {
             hostInfo = "neovim",

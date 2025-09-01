@@ -1,38 +1,31 @@
+-- lua/plugins/visual.lua
 -- Visual enhancements and appearance customization
 -- Contains scrollbars, colorizers, statusline customizations, and visual polish plugins
-local colors = {
-  cyan = "#7dcfff",
-  orange = "#ff9e64",
-  error = "#f7768e",
-  warning = "#e0af68",
-  info = "#7aa2f7",
-  hint = "#1abc9c",
-  purple = "#bb9af7",
-}
+
 return {
   -- Scrollbar: Visual scrollbar with search and diagnostic markers
   -- Shows scroll position, search results, git changes, and LSP diagnostics in the gutter
-  {
-    "petertriho/nvim-scrollbar",
-    config = function()
-      require("scrollbar").setup({
-        handle = {
-          color = colors.cyan,
-        },
-        marks = {
-          Search = { color = colors.orange },
-          Error = { color = colors.error },
-          Warn = { color = colors.warning },
-          Info = { color = colors.info },
-          Hint = { color = colors.hint },
-          Misc = { color = colors.purple },
-        },
-        handlers = {
-          gitsigns = true,
-        },
-      })
-    end,
-  },
+  -- {
+  --   "petertriho/nvim-scrollbar",
+  --   config = function()
+  --     require("scrollbar").setup({
+  --       handle = {
+  --         color = colors.cyan,
+  --       },
+  --       marks = {
+  --         Search = { color = colors.orange },
+  --         Error = { color = colors.error },
+  --         Warn = { color = colors.warning },
+  --         Info = { color = colors.info },
+  --         Hint = { color = colors.hint },
+  --         Misc = { color = colors.purple },
+  --       },
+  --       handlers = {
+  --         gitsigns = true,
+  --       },
+  --     })
+  --   end,
+  -- },
 
   -- Colorful Menu: Enhanced completion menu with better visual distinction
   -- Improves the appearance of completion popups with color coding
