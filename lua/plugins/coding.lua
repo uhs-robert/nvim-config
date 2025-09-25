@@ -16,7 +16,7 @@ return {
   -- Mini.align: Text alignment tool with customizable delimiters
   -- Aligns text around characters like =, :, |, etc. with 'ga' and 'gA' keymaps
   {
-    "echasnovski/mini.align",
+    "nvim-mini/mini.align",
     opts = {},
     keys = {
       { "ga", mode = { "n", "v" } },

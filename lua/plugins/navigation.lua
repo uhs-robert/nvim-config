@@ -83,7 +83,7 @@ return {
   -- {
   --   "stevearc/oil.nvim",
   --   opts = {},
-  --   dependencies = { { "echasnovski/mini.icons", opts = {} } },
+  --   dependencies = { { "nvim-mini/mini.icons", opts = {} } },
   --   -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
   --   lazy = false,
   -- },
@@ -154,7 +154,7 @@ return {
     -- optional for icon support
     dependencies = { "nvim-tree/nvim-web-devicons" },
     -- or if using mini.icons/mini.nvim
-    -- dependencies = { "echasnovski/mini.icons" },
+    -- dependencies = { "nvim-mini/mini.icons" },
     opts = {},
   },
 }

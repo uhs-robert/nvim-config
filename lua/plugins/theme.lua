@@ -1,5 +1,4 @@
--- theme.lua
--- lua/plugins/theme.lua
+-- neovim/.config/nvim/lua/plugins/theme.lua
 -- Neon Dark Theme: Professional dark theme with vibrant neon accent colors
 -- Modular plugin structure based on VSCode with custom enhancements
 
@@ -18,6 +17,8 @@ return {
   --   "olimorris/onedarkpro.nvim",
   --   priority = 1000, -- Ensure it loads first
   -- },
+
+  { "savq/melange-nvim" },
 
   -- Lush theme creator
   {
@@ -76,7 +77,7 @@ return {
       map("n", "<leader><tab>j", ":Tabby jump_to_tab<CR>", vim.tbl_extend("force", optsn, { desc = "Jump to tab" }))
     end,
   },
-  -- { "rebelot/kanagawa.nvim", },
+  { "rebelot/kanagawa.nvim" },
   -- {
   --   "uhs-robert/oasis.nvim",
   --   requires = { "rktjmp/lush.nvim" },

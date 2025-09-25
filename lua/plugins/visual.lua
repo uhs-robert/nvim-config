@@ -56,7 +56,7 @@ return {
   -- Mini HiPatterns: Pattern-based syntax highlighting (hex colors disabled)
   -- Provides additional syntax highlighting patterns, with hex color background disabled
   {
-    "echasnovski/mini.hipatterns",
+    "nvim-mini/mini.hipatterns",
     lazy = true,
     event = "BufReadPost",
     config = function()
