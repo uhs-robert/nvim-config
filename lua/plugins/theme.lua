@@ -1,42 +1,63 @@
--- neovim/.config/nvim/lua/plugins/theme.lua
--- Neon Dark Theme: Professional dark theme with vibrant neon accent colors
--- Modular plugin structure based on VSCode with custom enhancements
+-- lua/plugins/theme.lua
+-- Themes and thematic elements
+-- Contains colorschemes, status lines, and elements which use themes
 
 return {
-  -- --VSCode base theme dependency
-  -- {
-  --   "Mofiqul/vscode.nvim",
-  --   lazy = false,
-  --   priority = 1000,
-  --   config = function()
-  --     -- Load our custom neon-dark theme
-  --     -- require("neon-dark").setup()
-  --   end,
-  -- },
-  -- {
-  --   "olimorris/onedarkpro.nvim",
-  --   priority = 1000, -- Ensure it loads first
-  -- },
+  -- -- Melange
+  -- { "savq/melange-nvim" },
 
-  { "savq/melange-nvim" },
+  -- -- Nightfox
+  -- { "EdenEast/nightfox.nvim" },
 
-  -- Lush theme creator
+  -- -- kanagawa
+  -- { "rebelot/kanagawa.nvim" },
+
+  -- Oasis
+  {
+    -- "uhs-robert/oasis.nvim",
+    dir = "~/Documents/github-uphill/oasis.nvim/",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("oasis").apply()
+    end,
+  },
+
+  -- Lush
   {
     "rktjmp/lush.nvim",
-    -- if you wish to use your own colorscheme:
-    {
-      dir = "~/Documents/github-uphill/oasis.nvim/",
-      lazy = false,
-      priority = 1000,
-      config = function()
-        vim.cmd("colorscheme oasis-lagoon")
-      end,
-    },
   },
   {
     "rktjmp/shipwright.nvim",
   },
-  -- { "EdenEast/nightfox.nvim" },
+
+  -- Lualine: Enhanced statusline with time display and file manager integration
+  {
+    "nvim-lualine/lualine.nvim",
+    opts = function(_, opts)
+      opts.options.theme = "oasis"
+      opts.sections = vim.tbl_deep_extend("force", opts.sections or {}, {
+        lualine_z = {
+          {
+            function()
+              return os.date("%I:%M:%S %p")
+            end,
+            icon = "󰥔",
+          },
+        },
+      })
+      if opts.sections and opts.sections.lualine_c then
+        for _, section in ipairs(opts.sections.lualine_c) do
+          section.on_click = function()
+            local file_path = vim.fn.expand("%:p:h") -- Get file's directory
+            vim.fn.jobstart({ "dolphin", file_path }, { detach = true }) -- Open Dolphin
+          end
+        end
+      end
+    end,
+  },
+
+  -- Tabby: Enhanced tab viewer with slanted element design and which-key binds
   {
     "nanozuki/tabby.nvim",
     lazy = false,
@@ -52,7 +73,7 @@ return {
       option = {
         nerdfont = true,
         buf_name = { mode = "unique" },
-        lualine_theme = "auto",
+        -- lualine_theme = "auto",
       },
     },
     config = function(_, opts)
@@ -77,37 +98,4 @@ return {
       map("n", "<leader><tab>j", ":Tabby jump_to_tab<CR>", vim.tbl_extend("force", optsn, { desc = "Jump to tab" }))
     end,
   },
-  { "rebelot/kanagawa.nvim" },
-  -- {
-  --   "uhs-robert/oasis.nvim",
-  --   requires = { "rktjmp/lush.nvim" },
-  --   lazy = false,
-  --   priority = 1000,
-  --   config = function()
-  --     require("oasis").apply()
-  --   end,
-  -- },
-  -- -- Or with configuration
-  -- {
-  --   "projekt0n/github-nvim-theme",
-  --   name = "github-theme",
-  --   lazy = false, -- make sure we load this during startup if it is your main colorscheme
-  --   priority = 1000, -- make sure to load this before all the other start plugins
-  --   config = function()
-  --     require("github-theme").setup({
-  --       -- ...
-  --     })
-  --
-  --     vim.cmd("colorscheme github_dark")
-  --   end,
-  -- },
-  -- {
-  --   "uhs-robert/neon-dark.nvim",
-  --   lazy = false,
-  --   priority = 1000,
-  --   config = function()
-  --     require("neon-dark").setup()
-  --     vim.cmd([[colorscheme neon-dark]])
-  --   end,
-  -- },
 }
