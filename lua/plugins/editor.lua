@@ -53,13 +53,6 @@ return {
       vim.keymap.set("n", "zm", function()
         ufo.closeFoldsWith(1)
       end, { desc = "Close folds (level 1)" })
-
-      vim.keymap.set("n", "K", function()
-        local winid = ufo.peekFoldedLinesUnderCursor()
-        if not winid then
-          vim.lsp.buf.hover()
-        end
-      end, { desc = "Peek folded lines or hover" })
     end,
   },
 
