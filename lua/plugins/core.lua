@@ -3,7 +3,7 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "oasis-lagoon",
+      colorscheme = "oasis",
       news = {
         lazyvim = true,
         neovim = true,
