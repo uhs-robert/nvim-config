@@ -29,4 +29,13 @@ return {
       -- vim.keymap.set("n", "<leader>se", ts.emoji, { desc = "[S]earch [E]moji" })
     end,
   },
+  {
+    "NTBBloodbath/color-converter.nvim",
+    opts = {},
+    config = function(_, opts)
+      local cc = require("color-converter")
+      cc.setup(opts)
+      vim.keymap.set("n", "<leader>rC", cc.cycle, { desc = "Cycle hex/rgb/hsl color" })
+    end,
+  },
 }
