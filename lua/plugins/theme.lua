@@ -14,8 +14,8 @@ return {
 
   -- Oasis
   {
-    "uhs-robert/oasis.nvim",
-    -- dir = "~/Documents/github-uphill/oasis.nvim/",
+    -- "uhs-robert/oasis.nvim",
+    dir = "~/Documents/github-uphill/oasis.nvim/",
     lazy = false,
     priority = 1000,
     config = function()

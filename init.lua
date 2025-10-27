@@ -3,6 +3,3 @@
 require("config.lazy")
 
 vim.opt.path:append("**")
-
--- Local testing
--- vim.opt.rtp:append("~/Documents/github-uphill/oasis.nvim/")
