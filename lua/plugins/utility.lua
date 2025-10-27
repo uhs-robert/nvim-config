@@ -38,4 +38,21 @@ return {
       vim.keymap.set("n", "<leader>rC", cc.cycle, { desc = "Cycle hex/rgb/hsl color" })
     end,
   },
+  {
+    -- "uhs-robert/comment_filename.nvim",
+    dir = "~/Documents/github-uphill/comment_filename.nvim/",
+    opts = {
+      enabled = true,
+    },
+    config = function(_, opts)
+      require("comment_filename").setup(opts)
+      vim.keymap.set("n", "<leader>uH", "<cmd>CommentFilenameToggle<cr>", { desc = "Toggle Comment Filename (global)" })
+      vim.keymap.set(
+        "n",
+        "<leader>uh",
+        "<cmd>CommentFilenameBufferToggle<cr>",
+        { desc = "Toggle Comment Filename (buffer)" }
+      )
+    end,
+  },
 }
