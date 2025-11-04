@@ -6,9 +6,12 @@ return {
   -- Mount remote directories via SSHFS with integrated file picker support (Yazi)
   {
     -- Remote SSHFS Mount/Unmount
-    "uhs-robert/sshfs.nvim",
-    -- dir = "~/Documents/github-uphill/sshfs.nvim/",
+    -- "uhs-robert/sshfs.nvim",
+    dir = "~/Documents/github-uphill/sshfs.nvim/",
     opts = {
+      mounts = {
+        -- auto_change_dir_on_mount = true,
+      },
       ui = {
         file_picker = {
           -- auto_open_on_mount = false,
