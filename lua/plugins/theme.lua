@@ -14,15 +14,17 @@ return {
 
   -- Oasis
   {
-    -- "uhs-robert/oasis.nvim",
-    dir = "~/Documents/github-uphill/oasis.nvim/",
+    "uhs-robert/oasis.nvim",
+    -- dir = "~/Documents/github-uphill/oasis.nvim/",
     lazy = false,
     priority = 1000,
     config = function()
-      require("oasis").setup({
-        style = "lagoon",
-        useLegacyComments = false,
-      })
+      -- require("oasis").setup({
+      --   dark_style = "lagoon",
+      --   light_style = "desert",
+      --   useLegacyComments = false,
+      -- })
+      require("oasis").setup()
     end,
   },
 
