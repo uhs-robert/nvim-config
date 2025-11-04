@@ -43,15 +43,18 @@ return {
     dir = "~/Documents/github-uphill/comment_filename.nvim/",
     opts = {
       enabled = true,
+      filetypes = {
+        html = true, -- careful with this one
+      },
     },
     config = function(_, opts)
       require("comment_filename").setup(opts)
-      vim.keymap.set("n", "<leader>uH", "<cmd>CommentFilenameToggle<cr>", { desc = "Toggle Comment Filename (global)" })
+      vim.keymap.set("n", "<leader>uy", "<cmd>CommentFilenameToggle<cr>", { desc = "Toggle Comment Filename (Global)" })
       vim.keymap.set(
         "n",
-        "<leader>uh",
+        "<leader>uY",
         "<cmd>CommentFilenameBufferToggle<cr>",
-        { desc = "Toggle Comment Filename (buffer)" }
+        { desc = "Toggle Comment Filename (Buffer)" }
       )
     end,
   },
