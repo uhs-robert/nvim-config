@@ -151,55 +151,14 @@ keymap.set("n", "<leader>fE", function()
   require("snacks.explorer").open({ hidden = true, cwd = vim.fn.getcwd() })
 end, { noremap = true, silent = true, desc = "Explorer Snacks (cwd -hidden)" })
 
---Navigate vim panes better
--- keymap.set("n", "<c-h>", "<cmd>wincmd h<cr>")
--- keymap.set("n", "<c-j>", "<cmd>wincmd j<cr>")
--- keymap.set("n", "<c-k>", "<cmd>wincmd k<cr>")
--- keymap.set("n", "<c-l>", "<cmd>wincmd l<cr>")
-
--- -- Mouse click to inspect highlight colors
--- local function highlight_inspect()
---   local syn_id = vim.fn.synID(vim.fn.line("."), vim.fn.col("."), 1)
---   local name = vim.fn.synIDattr(syn_id, "name")
---   local linked = vim.fn.synIDattr(vim.fn.synIDtrans(syn_id), "name")
---
---   -- Optional: include Tree-sitter capture (if available)
---   local ts_cap = nil
---   local ok_ts, ts = pcall(require, "vim.treesitter")
---   if ok_ts then
---     local row, col = unpack(vim.api.nvim_win_get_cursor(0))
---     local caps = ts.get_captures_at_pos(0, row - 1, col - 1)
---     if caps and #caps > 0 then
---       ts_cap = caps[#caps].capture
---     end
---   end
---
---   local msg = ("Syntax: %s  →  Highlight: %s%s"):format(
---     name ~= "" and name or "∅",
---     linked ~= "" and linked or "∅",
---     ts_cap and ("  |  TS: @" .. ts_cap) or ""
---   )
---
---   local ok_noice, noice = pcall(require, "noice")
---   if ok_noice then
---     noice.notify(msg, "info", { title = "Highlight Inspect" })
---   else
---     vim.notify(msg, vim.log.levels.INFO, { title = "Highlight Inspect" })
---   end
--- end
---
--- -- 3) Click to show (normal mode). Fires after the cursor moves.
--- vim.keymap.set("n", "<LeftMouse>", function()
---   if vim.v.mouse_winid ~= 0 then
---     highlight_inspect()
---   end
--- end, { desc = "Click to show highlight group", silent = true })
---
--- -- Optional alternative: right click instead of left
--- -- vim.keymap.set('n', '<RightRelease>', function()
--- --   if vim.v.mouse_winid ~= 0 then highlight_inspect() end
--- -- end, { silent = true })
--- --
-
 -- Fzf Lua
 keymap.set("n", "<leader>f/", ":FzfLua<CR>")
+
+-- Toggle light/dark background color
+keymap.set("n", "<leader>uX", function()
+  if vim.o.background == "dark" then
+    vim.o.background = "light"
+  else
+    vim.o.background = "dark"
+  end
+end, { desc = "Toggle background color" })
