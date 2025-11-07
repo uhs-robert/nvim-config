@@ -153,12 +153,3 @@ end, { noremap = true, silent = true, desc = "Explorer Snacks (cwd -hidden)" })
 
 -- Fzf Lua
 keymap.set("n", "<leader>f/", ":FzfLua<CR>")
-
--- Toggle light/dark background color
-keymap.set("n", "<leader>uX", function()
-  if vim.o.background == "dark" then
-    vim.o.background = "light"
-  else
-    vim.o.background = "dark"
-  end
-end, { desc = "Toggle background color" })
