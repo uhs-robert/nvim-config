@@ -21,8 +21,17 @@ return {
     config = function()
       require("oasis").setup({
         dark_style = "lagoon",
-        light_style = "desert",
         useLegacyComments = false,
+        -- light_style = "desert",
+        -- styles = {
+        --   italic = false,
+        --   underline = false,
+        --   undercurl = false,
+        --   bold = false,
+        --   strikethrough = false,
+        -- },
+        -- terminal_colors = false,
+        -- transparent = true,
       })
       -- require("oasis").setup()
     end,
