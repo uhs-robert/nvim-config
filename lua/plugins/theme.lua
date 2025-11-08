@@ -29,12 +29,12 @@ return {
   },
 
   -- Lush
-  {
-    "rktjmp/lush.nvim",
-  },
-  {
-    "rktjmp/shipwright.nvim",
-  },
+  -- {
+  --   "rktjmp/lush.nvim",
+  -- },
+  -- {
+  --   "rktjmp/shipwright.nvim",
+  -- },
 
   -- Lualine: Enhanced statusline with time display and file manager integration
   {
