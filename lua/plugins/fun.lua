@@ -32,10 +32,14 @@ return {
     "rachartier/tiny-glimmer.nvim",
     event = "VeryLazy",
     priority = 10, -- Low priority to catch other plugins' keybindings
+    keys = {
+      "n",
+      "N",
+    },
     config = function()
       require("tiny-glimmer").setup({
         enabled = true,
-        disable_warnings = false, -- Disable warnings for debugging highlight issues
+        disable_warnings = true, -- Disable warnings for debugging highlight issues
         refresh_interval_ms = 8, -- Animation refresh rate in milliseconds
 
         -- Automatic keybinding overwrites
@@ -46,8 +50,8 @@ return {
             default_animation = "fade",
           },
           search = {
-            enabled = false, --ISSUE: disabled due to bug which causes n and N to do nothing
-            default_animation = "left_to_right",
+            enabled = false, --ISSUE: disabled as it removes MatchParen
+            default_animation = "pulse",
             next_mapping = "n", -- Key for next match
             prev_mapping = "N", -- Key for previous match
           },
