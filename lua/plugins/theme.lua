@@ -5,10 +5,10 @@
 return {
   -- -- Melange
   -- { "savq/melange-nvim" },
-
+  --
   -- -- Nightfox
   -- { "EdenEast/nightfox.nvim" },
-
+  --
   -- -- kanagawa
   -- { "rebelot/kanagawa.nvim" },
 
@@ -21,8 +21,8 @@ return {
     config = function()
       require("oasis").setup({
         dark_style = "lagoon",
-        useLegacyComments = false,
-        -- light_style = "desert",
+        light_style = "desert",
+        -- use_legacy_comments = true,
         -- styles = {
         --   italic = false,
         --   underline = false,
