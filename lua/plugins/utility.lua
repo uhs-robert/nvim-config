@@ -39,8 +39,8 @@ return {
     end,
   },
   {
-    -- "uhs-robert/comment_filename.nvim",
-    dir = "~/Documents/github-uphill/comment_filename.nvim/",
+    -- "uhs-robert/comment-filename.nvim",
+    dir = "~/Documents/github-uphill/comment-filename.nvim/",
     opts = {
       enabled = true,
       filetypes = {
