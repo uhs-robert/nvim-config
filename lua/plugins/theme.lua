@@ -22,6 +22,7 @@ return {
       require("oasis").setup({
         dark_style = "lagoon",
         light_style = "desert",
+        -- themed_syntax = false,
         -- use_legacy_comments = true,
         -- styles = {
         --   italic = false,
@@ -34,6 +35,21 @@ return {
         -- transparent = true,
       })
       -- require("oasis").setup()
+    end,
+  },
+
+  -- All Your Base
+  {
+    -- "uhs-robert/allyourbase.nvim",
+    dir = "/home/roberth/Documents/github-uphill/allyourbase.nvim/",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("allyourbase").setup({
+        colors = {
+          color0 = "#101825",
+        },
+      })
     end,
   },
 
