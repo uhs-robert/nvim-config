@@ -7,7 +7,7 @@ return {
   {
     -- Remote SSHFS Mount/Unmount
     -- "uhs-robert/sshfs.nvim",
-    dir = "~/Documents/github-uphill/sshfs.nvim/",
+    dir = "/home/roberth/Documents/github-uphill/sshfs.nvim/",
     opts = {
       mounts = {
         -- auto_change_dir_on_mount = true,
