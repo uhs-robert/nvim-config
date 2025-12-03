@@ -20,8 +20,10 @@ return {
     priority = 1000,
     config = function()
       require("oasis").setup({
-        dark_style = "lagoon",
-        light_style = "desert",
+        style = "lagoon",
+        -- dark_style = "auto",
+        -- light_style = "dune",
+        light_intensity = 3,
         -- themed_syntax = false,
         -- use_legacy_comments = true,
         -- styles = {
@@ -34,6 +36,9 @@ return {
         -- terminal_colors = false,
         -- transparent = true,
       })
+      vim.keymap.set("n", "<leader>uB", function()
+        require("oasis").cycle_intensity()
+      end, { desc = "Cycle Oasis light mode intensity" })
       -- require("oasis").setup()
     end,
   },
