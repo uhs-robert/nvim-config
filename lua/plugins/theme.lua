@@ -20,10 +20,14 @@ return {
     priority = 1000,
     config = function()
       require("oasis").setup({
-        style = "lagoon",
+        -- style = "lagoon",
         -- dark_style = "auto",
         -- light_style = "dune",
         light_intensity = 3,
+        -- contrast = {
+        -- min_ratio = 5.8,
+        -- force_aaa = false,
+        -- },
         -- themed_syntax = false,
         -- use_legacy_comments = true,
         -- styles = {
@@ -44,19 +48,19 @@ return {
   },
 
   -- All Your Base
-  {
-    -- "uhs-robert/allyourbase.nvim",
-    dir = "/home/roberth/Documents/github-uphill/allyourbase.nvim/",
-    lazy = false,
-    priority = 1000,
-    config = function()
-      require("allyourbase").setup({
-        colors = {
-          color0 = "#101825",
-        },
-      })
-    end,
-  },
+  -- {
+  --   -- "uhs-robert/allyourbase.nvim",
+  --   dir = "/home/roberth/Documents/github-uphill/allyourbase.nvim/",
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function()
+  --     require("allyourbase").setup({
+  --       colors = {
+  --         color0 = "#101825",
+  --       },
+  --     })
+  --   end,
+  -- },
 
   -- Lush
   -- {
