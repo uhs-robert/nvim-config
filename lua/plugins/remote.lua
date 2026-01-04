@@ -72,4 +72,93 @@ return {
       },
     },
   },
+  -- NOTE: For testing integrations
+
+  -- NVIM TREE
+  -- {
+  --   "nvim-tree/nvim-tree.lua",
+  --   version = "*",
+  --   lazy = false,
+  --   dependencies = {
+  --     "nvim-tree/nvim-web-devicons",
+  --   },
+  --   config = function()
+  --     require("nvim-tree").setup({})
+  --   end,
+  -- },
+
+  -- NEO TREE
+  -- {
+  --   "nvim-neo-tree/neo-tree.nvim",
+  --   branch = "v3.x",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "MunifTanjim/nui.nvim",
+  --     "nvim-tree/nvim-web-devicons", -- optional, but recommended
+  --   },
+  --   lazy = false, -- neo-tree will lazily load itself
+  -- },
+
+  -- OIL
+  -- {
+  --   "stevearc/oil.nvim",
+  --   ---@module 'oil'
+  --   ---@type oil.SetupOpts
+  --   opts = {},
+  --   -- Optional dependencies
+  --   dependencies = { { "nvim-mini/mini.icons", opts = {} } },
+  --   -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+  --   -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+  --   lazy = false,
+  -- },
+
+  -- TELESCOPE
+  {
+    "nvim-telescope/telescope.nvim",
+    tag = "v0.2.0",
+    dependencies = { "nvim-lua/plenary.nvim" },
+  },
+
+  -- NNN
+  {
+    "luukvbaal/nnn.nvim",
+    config = function()
+      require("nnn").setup()
+    end,
+  },
+
+  -- LF
+  -- {
+  --   "lmburns/lf.nvim",
+  --   config = function()
+  --     -- This feature will not work if the plugin is lazy-loaded
+  --     vim.g.lf_netrw = 1
+  --
+  --     require("lf").setup({
+  --       escape_quit = false,
+  --       border = "rounded",
+  --     })
+  --
+  --     vim.keymap.set("n", "<M-o>", "<Cmd>Lf<CR>")
+  --   end,
+  --   requires = { "toggleterm.nvim" },
+  -- },
+  -- { "akinsho/toggleterm.nvim", version = "*", config = true },
+
+  -- MINI
+  -- { "nvim-mini/mini.nvim", version = false },
+
+  -- RANGER
+  -- {
+  --   "kelly-lin/ranger.nvim",
+  --   config = function()
+  --     require("ranger-nvim").setup({ replace_netrw = true })
+  --     vim.api.nvim_set_keymap("n", "<leader>ef", "", {
+  --       noremap = true,
+  --       callback = function()
+  --         require("ranger-nvim").open(true)
+  --       end,
+  --     })
+  --   end,
+  -- },
 }
