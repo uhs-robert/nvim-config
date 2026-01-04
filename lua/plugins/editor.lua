@@ -59,14 +59,14 @@ return {
 
   -- Undotree: Visual undo history browser
   -- Navigate through undo/redo history with a tree-like interface, toggle with <leader>U
-  {
-    "jiaoshijie/undotree",
-    dependencies = "nvim-lua/plenary.nvim",
-    config = true,
-    keys = { -- load the plugin only when using it's keybinding:
-      { "<leader>U", "<cmd>lua require('undotree').toggle()<cr>" },
-    },
-  },
+  -- {
+  --   "jiaoshijie/undotree",
+  --   dependencies = "nvim-lua/plenary.nvim",
+  --   config = true,
+  --   keys = { -- load the plugin only when using it's keybinding:
+  --     { "<leader>U", "<cmd>lua require('undotree').toggle()<cr>" },
+  --   },
+  -- },
 
   -- No Neck Pain: Center buffer content for comfortable reading
   -- Centers content in the middle of the screen with configurable width (150 chars)

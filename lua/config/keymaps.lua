@@ -35,7 +35,7 @@ wk.add({
   { "<leader>o", desc = "overseer", icon = { icon = "󱢇", color = "red", h1 = "WhichKey" } },
   { "<leader>y", desc = "yazi", icon = { icon = "󰇥", color = "green", h1 = "WhichKey" } },
   { "<leader>K", desc = "Open Man Page", icon = { icon = "", color = "cyan", h1 = "WhichKey" } },
-  { "<leader>U", desc = "UFO Undo", icon = { icon = "󱃄", color = "green", h1 = "WhichKey" } },
+  -- { "<leader>U", desc = "UFO Undo", icon = { icon = "󱃄", color = "green", h1 = "WhichKey" } },
 })
 
 -- Change directory to the active file
