@@ -18,7 +18,8 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = pick_colorscheme(),
+      colorscheme = "oasis",
+      -- colorscheme = pick_colorscheme(),
       news = {
         lazyvim = true,
         neovim = true,
