@@ -130,14 +130,14 @@ return {
     },
     opts = {
       -- if you want to open yazi instead of netrw, see below for more info
-      open_for_directories = true,
+      -- open_for_directories = true,
       enable_mouse_support = true,
       keymaps = {
         show_help = "<f1>",
       },
       hooks = {
         yazi_closed_successfully = function(chosen_file, config, state)
-          vim.notify(vim.inspect({ chosen_file, state.last_directory.filename }))
+          -- vim.notify(vim.inspect({ chosen_file, state.last_directory.filename }))
         end,
       },
     },
@@ -145,7 +145,7 @@ return {
     init = function()
       -- More details: https://github.com/mikavilpas/yazi.nvim/issues/802
       -- vim.g.loaded_netrw = 1
-      vim.g.loaded_netrwPlugin = 1
+      -- vim.g.loaded_netrwPlugin = 1
     end,
   },
   -- Fzf lua
