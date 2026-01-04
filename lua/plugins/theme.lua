@@ -12,6 +12,63 @@ return {
   -- -- kanagawa
   -- { "rebelot/kanagawa.nvim" },
 
+  {
+    -- "uhs-robert/color-chameleon.nvim",
+    dir = "/home/roberth/Documents/github-uphill/color-chameleon.nvim/",
+    lazy = false,
+    priority = 900,
+    config = function()
+      local uid = (vim.uv or vim.loop).getuid()
+      local is_sudoedit = vim.env.SUDOEDIT == "1" -- This requires your shell's config to export a flag like: SUDO_EDITOR="env SUDOEDIT=1 /usr/bin/nvim"
+      local is_root = is_sudoedit or uid == 0
+
+      -- stylua: ignore start
+      require("color-chameleon").setup({
+        enabled = true,
+        rules = {
+          { colorscheme = "oasis-sol", condition = function() return is_root end },
+          { path = "~/mnt/", colorscheme = "oasis-mirage" },
+        },
+        default = "oasis",
+      })
+      -- stylua: ignore end
+
+      -- -- stylua: ignore start
+      -- require("color-chameleon").setup({
+      --   enabled = true,
+      --   rules = {
+      --     { colorscheme = "oasis-sol", condition = function() return is_root end },
+      --     { path = "~/mnt/", colorscheme = "oasis-canyon" },
+      --     { path = "~/demo/project-a/", colorscheme = "oasis-desert" },
+      --     { filetype = "markdown", colorscheme = "oasis-twilight" },
+      --     { buftype = "terminal", colorscheme = "oasis-cactus" },
+      --   },
+      --   default = "oasis-lagoon"
+      -- })
+      -- -- stylua: ignore end
+
+      -- Demo helper: Show directory and colorscheme on buffer enter
+      -- local first_enter = true
+      -- vim.api.nvim_create_autocmd({ "BufEnter", "TermOpen" }, {
+      --   callback = function()
+      --     if first_enter then
+      --       first_enter = false
+      --       return
+      --     end
+      --     local bufname = vim.fn.expand("%")
+      --     if bufname == "" then
+      --       return -- Skip empty buffers
+      --     end
+      --     local bufdir = vim.fn.expand("%:p:h") -- Buffer's directory
+      --     local colorscheme = vim.g.colors_name or "none"
+      --     vim.api.nvim_echo({
+      --       { "📂 " .. bufdir, "Normal" },
+      --       { "\n🎨 " .. colorscheme, "Normal" },
+      --     }, false, {})
+      --   end,
+      -- })
+    end,
+  },
   -- Oasis
   {
     -- "uhs-robert/oasis.nvim",
@@ -39,6 +96,36 @@ return {
         -- },
         -- terminal_colors = false,
         -- transparent = true,
+        -- highlight_overrides = function(c, colors)
+        --   ---@type OasisHighlightOverrides
+        --   return {
+        --     -- Comment = { fg = c.fg.dim },
+        --     desert = {
+        --       Comment = { fg = c.syntax.preproc },
+        --     },
+        --     lagoon = {
+        --       light_3 = {
+        --         Comment = { fg = "#FFF000" },
+        --       },
+        --     },
+        --     light = {
+        --       Comment = { fg = "#FF0000" },
+        --     },
+        --     light_5 = {
+        --       Comment = { fg = "#FFA000" },
+        --     },
+        --   }
+        -- end,
+        -- palette_overrides = function(c, colors)
+        --   ---@type OasisPaletteOverrides
+        --   return {
+        --     desert = {
+        --       syntax = {
+        --         string = colors.rose[500],
+        --       },
+        --     },
+        --   }
+        -- end,
       })
       vim.keymap.set("n", "<leader>uB", function()
         require("oasis").cycle_intensity()
