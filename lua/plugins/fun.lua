@@ -2,14 +2,15 @@
 -- Fun and recreational plugins
 -- Contains games, typing practice, and entertainment features for Neovim
 return {
-  -- Typr: Typing speed test and practice game
-  -- Built-in typing game with statistics tracking, commands: :Typr, :TyprStats
-  {
-    "nvzone/typr",
-    dependencies = "nvzone/volt",
-    opts = {},
-    cmd = { "Typr", "TyprStats" },
-  },
+  -- -- Typr: Typing speed test and practice game
+  -- -- Built-in typing game with statistics tracking, commands: :Typr, :TyprStats
+  -- {
+  --   "nvzone/typr",
+  --   dependencies = "nvzone/volt",
+  --   opts = {},
+  --   cmd = { "Typr", "TyprStats" },
+  -- },
+
   -- Tiny-glimmer: adds customizable animations to text operations
   -- {
   --   "rachartier/tiny-glimmer.nvim",
