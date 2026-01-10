@@ -68,23 +68,6 @@ return {
   --   },
   -- },
 
-  -- No Neck Pain: Center buffer content for comfortable reading
-  -- Centers content in the middle of the screen with configurable width (150 chars)
-  {
-    "shortcuts/no-neck-pain.nvim",
-    version = "*",
-    lazy = false,
-    config = function()
-      require("no-neck-pain").setup({
-        width = 150,
-        autocmds = {
-          enableOnVimEnter = false,
-          skipEnteringNoNeckPainBuffer = true,
-        },
-      })
-    end,
-  },
-
   -- Pretty Fold: Enhanced fold text display
   -- Improves the appearance of folded code blocks with better formatting
   {
