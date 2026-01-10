@@ -153,3 +153,7 @@ end, { noremap = true, silent = true, desc = "Explorer Snacks (cwd -hidden)" })
 
 -- Fzf Lua
 keymap.set("n", "<leader>f/", ":FzfLua<CR>")
+
+-- Huefy
+keymap.set({ "n", "v" }, "<leader>cp", "<cmd>Huefy<cr>", { desc = "Pick a color" })
+keymap.set({ "n", "v" }, "<leader>cP", "<cmd>Shades<cr>", { desc = "Convert a color" })
