@@ -28,34 +28,34 @@ return {
     },
   },
 
-  -- UFO: Advanced folding with treesitter and LSP integration
-  -- Provides intelligent code folding with peek functionality and custom fold levels
-  {
-    "kevinhwang91/nvim-ufo",
-    dependencies = "kevinhwang91/promise-async",
-    config = function()
-      vim.o.foldcolumn = "1"
-      vim.o.foldlevel = 99
-      vim.o.foldlevelstart = 99
-      vim.o.foldenable = true
-
-      require("ufo").setup({
-        provider_selector = function(_, _, _)
-          return { "treesitter", "indent" }
-        end,
-      })
-
-      local ufo = require("ufo")
-
-      -- Keymaps using WhichKey labels
-      vim.keymap.set("n", "zR", ufo.openAllFolds, { desc = "Open all folds" })
-      vim.keymap.set("n", "zM", ufo.closeAllFolds, { desc = "Close all folds" })
-      vim.keymap.set("n", "zr", ufo.openFoldsExceptKinds, { desc = "Open folds (skip comments/imports)" })
-      vim.keymap.set("n", "zm", function()
-        ufo.closeFoldsWith(1)
-      end, { desc = "Close folds (level 1)" })
-    end,
-  },
+  -- -- UFO: Advanced folding with treesitter and LSP integration
+  -- -- Provides intelligent code folding with peek functionality and custom fold levels
+  -- {
+  --   "kevinhwang91/nvim-ufo",
+  --   dependencies = "kevinhwang91/promise-async",
+  --   config = function()
+  --     vim.o.foldcolumn = "1"
+  --     vim.o.foldlevel = 99
+  --     vim.o.foldlevelstart = 99
+  --     vim.o.foldenable = true
+  --
+  --     require("ufo").setup({
+  --       provider_selector = function(_, _, _)
+  --         return { "treesitter", "indent" }
+  --       end,
+  --     })
+  --
+  --     local ufo = require("ufo")
+  --
+  --     -- Keymaps using WhichKey labels
+  --     vim.keymap.set("n", "zR", ufo.openAllFolds, { desc = "Open all folds" })
+  --     vim.keymap.set("n", "zM", ufo.closeAllFolds, { desc = "Close all folds" })
+  --     vim.keymap.set("n", "zr", ufo.openFoldsExceptKinds, { desc = "Open folds (skip comments/imports)" })
+  --     vim.keymap.set("n", "zm", function()
+  --       ufo.closeFoldsWith(1)
+  --     end, { desc = "Close folds (level 1)" })
+  --   end,
+  -- },
 
   -- Undotree: Visual undo history browser
   -- Navigate through undo/redo history with a tree-like interface, toggle with <leader>U

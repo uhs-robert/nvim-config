@@ -112,20 +112,20 @@ return {
   --   lazy = false,
   -- },
 
-  -- TELESCOPE
-  {
-    "nvim-telescope/telescope.nvim",
-    tag = "v0.2.0",
-    dependencies = { "nvim-lua/plenary.nvim" },
-  },
+  -- -- TELESCOPE
+  -- {
+  --   "nvim-telescope/telescope.nvim",
+  --   tag = "v0.2.0",
+  --   dependencies = { "nvim-lua/plenary.nvim" },
+  -- },
 
-  -- NNN
-  {
-    "luukvbaal/nnn.nvim",
-    config = function()
-      require("nnn").setup()
-    end,
-  },
+  -- -- NNN
+  -- {
+  --   "luukvbaal/nnn.nvim",
+  --   config = function()
+  --     require("nnn").setup()
+  --   end,
+  -- },
 
   -- LF
   -- {
