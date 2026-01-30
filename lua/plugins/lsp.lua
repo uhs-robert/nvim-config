@@ -12,12 +12,12 @@ return {
     end,
   },
 
-  -- LSP Config: Extended TypeScript server configuration
-  -- Enhances LazyVim's LSP setup with TypeScript inlay hints and custom filetypes
+  -- LSP Config: ts_ls replaces vtsls (vtsls returns empty semantic token data)
   { -- extend LazyVim's LSP setup
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
+        -- PHP
         phpactor = {
           language_server = {
             workspace = {
@@ -25,29 +25,118 @@ return {
             },
           },
         },
-        tsserver = {
-          init_options = {
-            hostInfo = "neovim",
-          },
+        -- Disable vtsls (empty semantic tokens, see https://github.com/yioneko/vtsls/issues/XXX)
+        vtsls = { enabled = false },
+        tsserver = { enabled = false },
+        -- TypeScript/JavaScript via ts_ls with equivalent features to the LazyVim vtsls extra
+        ts_ls = {
+          enabled = true,
           filetypes = {
             "javascript",
             "javascriptreact",
+            "javascript.jsx",
             "typescript",
             "typescriptreact",
+            "typescript.tsx",
           },
           settings = {
             typescript = {
+              updateImportsOnFileMove = { enabled = "always" },
+              suggest = {
+                completeFunctionCalls = true,
+              },
               inlayHints = {
                 includeInlayParameterNameHints = "all",
+                enumMemberValues = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+                parameterNames = { enabled = "literals" },
+                parameterTypes = { enabled = true },
+                propertyDeclarationTypes = { enabled = true },
+                variableTypes = { enabled = false },
               },
             },
             javascript = {
+              updateImportsOnFileMove = { enabled = "always" },
+              suggest = {
+                completeFunctionCalls = true,
+              },
               inlayHints = {
                 includeInlayParameterNameHints = "all",
+                enumMemberValues = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+                parameterNames = { enabled = "literals" },
+                parameterTypes = { enabled = true },
+                propertyDeclarationTypes = { enabled = true },
+                variableTypes = { enabled = false },
               },
             },
           },
+          keys = {
+            {
+              "gD",
+              vim.lsp.buf.declaration,
+              desc = "Goto Declaration",
+            },
+            {
+              "<leader>co",
+              function()
+                vim.lsp.buf.code_action({
+                  apply = true,
+                  context = { only = { "source.organizeImports" }, diagnostics = {} },
+                })
+              end,
+              desc = "Organize Imports",
+            },
+            {
+              "<leader>cM",
+              function()
+                vim.lsp.buf.code_action({
+                  apply = true,
+                  context = { only = { "source.addMissingImports.ts" }, diagnostics = {} },
+                })
+              end,
+              desc = "Add missing imports",
+            },
+            {
+              "<leader>cu",
+              function()
+                vim.lsp.buf.code_action({
+                  apply = true,
+                  context = { only = { "source.removeUnused.ts" }, diagnostics = {} },
+                })
+              end,
+              desc = "Remove unused imports",
+            },
+            {
+              "<leader>cD",
+              function()
+                vim.lsp.buf.code_action({
+                  apply = true,
+                  context = { only = { "source.fixAll.ts" }, diagnostics = {} },
+                })
+              end,
+              desc = "Fix all diagnostics",
+            },
+          },
         },
+      },
+    },
+  },
+
+  -- Filetype icons for TypeScript ecosystem (replaces LazyVim extra's mini.icons config)
+  {
+    "nvim-mini/mini.icons",
+    opts = {
+      file = {
+        [".eslintrc.js"] = { glyph = "󰱺", hl = "MiniIconsYellow" },
+        [".node-version"] = { glyph = "", hl = "MiniIconsGreen" },
+        [".prettierrc"] = { glyph = "", hl = "MiniIconsPurple" },
+        [".yarnrc.yml"] = { glyph = "", hl = "MiniIconsBlue" },
+        ["eslint.config.js"] = { glyph = "󰱺", hl = "MiniIconsYellow" },
+        ["package.json"] = { glyph = "", hl = "MiniIconsGreen" },
+        ["tsconfig.json"] = { glyph = "", hl = "MiniIconsAzure" },
+        ["tsconfig.build.json"] = { glyph = "", hl = "MiniIconsAzure" },
+        ["yarn.lock"] = { glyph = "", hl = "MiniIconsBlue" },
       },
     },
   },
