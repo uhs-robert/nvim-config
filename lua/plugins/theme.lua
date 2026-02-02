@@ -77,14 +77,25 @@ return {
     priority = 1000,
     config = function()
       require("oasis").setup({
-        -- style = "lagoon",
-        -- dark_style = "auto",
-        -- light_style = "dune",
-        light_intensity = 3,
-        -- contrast = {
-        -- min_ratio = 5.8,
-        -- force_aaa = false,
-        -- },
+        style = "lagoon",
+        -- dark_style = "sol",
+        -- light_style = "night",
+        -- light_intensity = 3,
+        -- dark_intensity = 2,
+        contrast = {
+          -- min_ratio = 5.8,
+          -- force_aaa = false,
+        },
+        themes = {
+          sol = {
+            dark_intensity = 5,
+          },
+        },
+        integrations = {
+          plugins = {
+            -- snacks = false,
+          },
+        },
         -- themed_syntax = false,
         -- use_legacy_comments = true,
         -- styles = {
@@ -96,26 +107,26 @@ return {
         -- },
         -- terminal_colors = false,
         -- transparent = true,
-        -- highlight_overrides = function(c, colors)
-        --   ---@type OasisHighlightOverrides
-        --   return {
-        --     -- Comment = { fg = c.fg.dim },
-        --     desert = {
-        --       Comment = { fg = c.syntax.preproc },
-        --     },
-        --     lagoon = {
-        --       light_3 = {
-        --         Comment = { fg = "#FFF000" },
-        --       },
-        --     },
-        --     light = {
-        --       Comment = { fg = "#FF0000" },
-        --     },
-        --     light_5 = {
-        --       Comment = { fg = "#FFA000" },
-        --     },
-        --   }
-        -- end,
+        highlight_overrides = function(c, colors)
+          ---@type OasisHighlightOverrides
+          return {
+            -- Comment = { fg = c.fg.dim },
+            -- desert = {
+            --   Comment = { fg = c.syntax.preproc },
+            -- },
+            -- lagoon = {
+            --   light_3 = {
+            --     Comment = { fg = "#FFF000" },
+            --   },
+            -- },
+            -- light = {
+            --   Comment = { fg = "#FF0000" },
+            -- },
+            -- light_5 = {
+            --   Comment = { fg = "#FFA000" },
+            -- },
+          }
+        end,
         -- palette_overrides = function(c, colors)
         --   ---@type OasisPaletteOverrides
         --   return {
@@ -127,9 +138,16 @@ return {
         --   }
         -- end,
       })
-      vim.keymap.set("n", "<leader>uB", function()
+      -- Light intensity
+      vim.keymap.set("n", "<leader>Cl", function()
         require("oasis").cycle_intensity()
       end, { desc = "Cycle Oasis light mode intensity" })
+
+      -- Dark intensity
+      vim.keymap.set("n", "<leader>Cb", function()
+        require("oasis").cycle_dark_intensity()
+      end, { desc = "Cycle Oasis light mode intensity" })
+
       -- require("oasis").setup()
     end,
   },
