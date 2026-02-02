@@ -1,5 +1,6 @@
 -- lua/plugins/dashboard.lua
-local header = [[
+local HEADERS = {
+  neovim = [[
       ████ ██████           █████      ██    UpHill Solutions
      ███████████             █████                            
      █████████ ███████████████████ ███   ███████████  
@@ -7,7 +8,8 @@ local header = [[
    █████████ ██████████ █████████ █████ █████ ████ █████  
  ███████████ ███    ███ █████████ █████ █████ ████ █████ 
 ██████  █████████████████████ ████ █████ █████ ████ ██████
-]]
+ ]],
+}
 
 -- Dashboard configuration and startup screen customization
 -- Contains Snacks.nvim dashboard setup with UpHill Solutions branding and custom theming
@@ -21,10 +23,9 @@ return {
       dashboard = {
         sections = {
           ---@diagnostic disable-next-line: assign-type-mismatch
-          { padding = 0, align = "center", text = { header, hl = "header" } },
+          { padding = 0, align = "center", text = { HEADERS.neovim, hl = "header" } },
           ---@diagnostic disable-next-line: assign-type-mismatch
           { padding = 2, align = "center", text = { "[ https://uphillsolutions.tech ]", hl = "Identifier" } },
-          --{ section = "terminal", align = "center", cmd = "curl -s 'wttr.in/?0'", indent = 20 },
           { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
           { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
           { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
