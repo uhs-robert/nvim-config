@@ -1,4 +1,4 @@
--- lua/plugins/dashboard.lua
+-- lua/plugins/snacks.lua
 local HEADERS = {
   neovim = [[
       ████ ██████           █████      ██    UpHill Solutions
