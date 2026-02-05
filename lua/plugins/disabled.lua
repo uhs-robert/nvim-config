@@ -8,6 +8,8 @@ return {
     "folke/tokyonight.nvim",
     enabled = false,
   },
+  -- { "ellisonleao/gruvbox.nvim", enabled = true },
+  -- { "rebelot/kanagawa.nvim", enabled = true },
   {
     "akinsho/bufferline.nvim",
     enabled = false,
