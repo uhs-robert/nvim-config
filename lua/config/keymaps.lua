@@ -157,3 +157,11 @@ keymap.set("n", "<leader>f/", ":FzfLua<CR>")
 -- Huefy
 keymap.set({ "n", "v" }, "<leader>cp", "<cmd>Huefy<cr>", { desc = "Pick a color" })
 keymap.set({ "n", "v" }, "<leader>cP", "<cmd>Shades<cr>", { desc = "Convert a color" })
+
+-- Clear all marks
+vim.keymap.set("n", "<Leader>dm", function()
+  vim.cmd.delmarks("a-z")
+  vim.cmd.delmarks("A-Z0-9")
+  vim.cmd.wshada("!") -- Force write to shada file
+  print("All marks cleared.")
+end, { desc = "Delete all marks" })
