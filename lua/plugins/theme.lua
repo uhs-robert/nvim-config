@@ -14,7 +14,7 @@ return {
 
   {
     -- "uhs-robert/color-chameleon.nvim",
-    dir = "/home/roberth/Documents/github-uphill/color-chameleon.nvim/",
+    dir = vim.env.HOME .. "/Documents/github-uphill/color-chameleon.nvim/",
     lazy = false,
     priority = 900,
     config = function()
@@ -72,7 +72,7 @@ return {
   -- Oasis
   {
     -- "uhs-robert/oasis.nvim",
-    dir = "/home/roberth/Documents/github-uphill/oasis.nvim/",
+    dir = vim.env.HOME .. "/Documents/github-uphill/oasis.nvim/",
     lazy = false,
     priority = 1000,
     config = function()
@@ -155,7 +155,7 @@ return {
   -- All Your Base
   -- {
   --   -- "uhs-robert/allyourbase.nvim",
-  --   dir = "/home/roberth/Documents/github-uphill/allyourbase.nvim/",
+  --   dir = vim.env.HOME .. "/Documents/github-uphill/allyourbase.nvim/",
   --   lazy = false,
   --   priority = 1000,
   --   config = function()
