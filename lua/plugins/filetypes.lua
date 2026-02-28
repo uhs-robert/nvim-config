@@ -7,4 +7,7 @@ return {
     ft = { "yuck" },
     -- Ensure it loads for the 'yuck' filetype
   },
+  {
+    "tridactyl/vim-tridactyl",
+  },
 }
