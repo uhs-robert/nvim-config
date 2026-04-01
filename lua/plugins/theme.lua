@@ -36,7 +36,7 @@ return {
       require("color-chameleon").setup({
         enabled = true,
         rules = {
-          { colorscheme = "oasis-sol", condition = function() return is_root end },
+          { colorscheme = "oasis-scorpion", condition = function() return is_root end },
           { path = "~/mnt/", colorscheme = "oasis-mirage" },
         },
         default = "oasis",
@@ -87,7 +87,7 @@ return {
     priority = 1000,
     config = function()
       require("oasis").setup({
-        style = "lagoon",
+        style = "night",
         -- dark_style = "sol",
         -- light_style = "night",
         -- light_intensity = 3,
@@ -137,16 +137,19 @@ return {
             -- },
           }
         end,
-        -- palette_overrides = function(c, colors)
-        --   ---@type OasisPaletteOverrides
-        --   return {
-        --     desert = {
-        --       syntax = {
-        --         string = colors.rose[500],
-        --       },
-        --     },
-        --   }
-        -- end,
+        palette_overrides = function(c, colors)
+          ---@type OasisPaletteOverrides
+          return {
+            -- night = {
+            --   bg = colors.theme.midnight.bg,
+            -- },
+            -- desert = {
+            --   syntax = {
+            --     string = colors.rose[500],
+            --   },
+            -- },
+          }
+        end,
       })
       -- Light intensity
       vim.keymap.set("n", "<leader>Cl", function()
