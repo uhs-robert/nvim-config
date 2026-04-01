@@ -12,6 +12,16 @@ return {
   -- -- kanagawa
   -- { "rebelot/kanagawa.nvim" },
 
+  -- mfd.nvim
+  {
+    "kungfusheep/mfd.nvim",
+    config = function()
+      require("mfd").setup({
+        accessibility_contrast = 1,
+      })
+    end,
+  },
+
   {
     -- "uhs-robert/color-chameleon.nvim",
     dir = vim.env.HOME .. "/Documents/github-uphill/color-chameleon.nvim/",
