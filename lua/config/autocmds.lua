@@ -70,3 +70,11 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
     })
   end,
 })
+
+-- Google Apps Script as javascript
+api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+  pattern = { "*.gs" },
+  callback = function(event)
+    vim.bo[event.buf].filetype = "javascript"
+  end,
+})
