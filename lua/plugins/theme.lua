@@ -17,7 +17,7 @@ return {
     "kungfusheep/mfd.nvim",
     config = function()
       require("mfd").setup({
-        accessibility_contrast = 1,
+        accessibility_contrast = 2,
       })
     end,
   },
@@ -87,7 +87,7 @@ return {
     priority = 1000,
     config = function()
       require("oasis").setup({
-        style = "night",
+        style = "moonlight",
         -- dark_style = "sol",
         -- light_style = "night",
         -- light_intensity = 3,
