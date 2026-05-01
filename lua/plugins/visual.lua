@@ -16,18 +16,15 @@ return {
     end,
   },
 
-  -- Colorizer: Live color preview for CSS colors, hex codes, and color functions
-  -- Shows background colors for hex codes, CSS colors, and color function calls
+  -- Highlight Colors: Live color preview for CSS colors, hex codes, and other color functions
   {
-    "catgoose/nvim-colorizer.lua",
-    event = "BufReadPre",
-    opts = {
-      user_default_options = {
-        mode = "background",
-        css = true,
-        css_fn = true,
-      },
-    },
+    "brenoprata10/nvim-highlight-colors",
+    config = function()
+      require("nvim-highlight-colors").setup({
+        render = "background",
+        enable_tailwind = true,
+      })
+    end,
   },
 
   -- Mini HiPatterns: Pattern-based syntax highlighting (hex colors disabled)
