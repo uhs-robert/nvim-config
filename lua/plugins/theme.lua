@@ -24,7 +24,7 @@ return {
 
   {
     -- "uhs-robert/color-chameleon.nvim",
-    dir = vim.env.HOME .. "/Documents/github-uphill/color-chameleon.nvim/",
+    dir = vim.g.github .. "/color-chameleon.nvim/",
     lazy = false,
     priority = 900,
     config = function()
@@ -82,7 +82,7 @@ return {
   -- Oasis
   {
     -- "uhs-robert/oasis.nvim",
-    dir = vim.env.HOME .. "/Documents/github-uphill/oasis.nvim/",
+    dir = vim.g.github .. "/oasis.nvim/",
     lazy = false,
     priority = 1000,
     config = function()

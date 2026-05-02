@@ -7,7 +7,7 @@ return {
   {
     -- Remote SSHFS Mount/Unmount
     -- "uhs-robert/sshfs.nvim",
-    dir = vim.env.HOME .. "/Documents/github-uphill/sshfs.nvim/",
+    dir = vim.g.github .. "/sshfs.nvim/",
     opts = {
       global_paths = {
         "~/.config",
