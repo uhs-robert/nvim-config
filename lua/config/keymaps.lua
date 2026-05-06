@@ -3,43 +3,15 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
--- local
 local wk = require("which-key")
-local keymap = vim.keymap
-
--- disable keymaps
-keymap.del("n", "<leader><tab>l")
-keymap.del("n", "<leader><tab>]")
-keymap.del("n", "<leader><tab>[")
-
--- Tab Settings
-keymap.set("n", "<leader><tab>l", "<cmd>tabnext<cr>", { desc = "Next tab" })
-
--- Movement adjustments
-keymap.set({ "n", "v" }, "H", "^", { desc = "Go to beginning of line" })
-keymap.set({ "n", "v" }, "L", "$g_", { desc = "Go to end of line" })
--- keymap.set("n", "J", "30j zz", { desc = "Move down by n spaces" })
--- keymap.set("n", "K", "30k zz", { desc = "Move down by n spaces" })
-
--- % Modifications
-keymap.set("n", "mm", "%") -- Jump to matching pair
-keymap.set("x", "m", "%") -- Select to matching pair
-keymap.set("o", "m", "%") -- Delete until matching pair
-
--- Visual mode paste without overwriting the unnamed register
-keymap.set("x", "p", '"_dP', { desc = "Paste without replacing register" })
 
 -- Fixes for missing icons in which-key
-wk.add({
-  { "<leader>a", desc = "ai", icon = { icon = "", color = "blue", h1 = "WhichKey" } },
-  { "<leader>o", desc = "overseer", icon = { icon = "󱢇", color = "red", h1 = "WhichKey" } },
-  { "<leader>y", desc = "yazi", icon = { icon = "󰇥", color = "green", h1 = "WhichKey" } },
-  { "<leader>K", desc = "Open Man Page", icon = { icon = "", color = "cyan", h1 = "WhichKey" } },
-  -- { "<leader>U", desc = "UFO Undo", icon = { icon = "󱃄", color = "green", h1 = "WhichKey" } },
-})
+-- wk.add({
+--   { "<leader>o", desc = "overseer", icon = { icon = "󱢇", color = "red", h1 = "WhichKey" } },
+-- })
 
 -- Change directory to the active file
-keymap.set("n", "<leader>cd", function()
+vim.keymap.set("n", "<leader>cd", function()
   vim.cmd("cd %:p:h")
   local cwd = vim.fn.getcwd()
   vim.notify(
@@ -50,38 +22,34 @@ keymap.set("n", "<leader>cd", function()
 end, { noremap = true, silent = true, desc = "Change directory to open file" })
 
 -- Open the current file in the file explorer
-keymap.set(
+vim.keymap.set(
   "n",
   "<leader>fo",
-  "<cmd>:!dolphin %:p:h<cr>",
+  ":!dolphin %:p:h<CR>",
   { noremap = true, silent = true, desc = "Open in file explorer" }
 )
 
 -- Save file without auto-formatting
-keymap.set(
+vim.keymap.set(
   "n",
   "<leader>fs",
-  "<cmd>noautocmd w<cr>",
+  ":noautocmd w<CR>",
   { noremap = true, silent = true, desc = "Save file (no formatting)" }
 )
 
 --Return to Snacks Dashboard
-keymap.set("n", "<leader>1", function()
-  if vim.bo.filetype == "snacks_dashboard" then
-    vim.notify("Hey, you're already here! Welcome home 󰟒", vim.log.levels.INFO, { titlekeym = "Dashboard" })
-  else
-    pcall(function()
-      require("snacks").dashboard.open()
-    end)
-  end
+vim.keymap.set("n", "<leader>1", function()
+  if vim.bo.filetype ~= "snacks_dashboard" then pcall(function()
+    require("snacks").dashboard.open()
+  end) end
 end, { desc = "Home" })
 wk.add({
   { "<leader>1", icon = { icon = "", color = "blue", h1 = "WhichKey" } },
 })
 
 -- Github Clone Repository
-keymap.set("n", "<leader>gC", function()
-  local default_clone_dir = "~/Documents/github-uphill/"
+vim.keymap.set("n", "<leader>gC", function()
+  local default_clone_dir = "~/Development/"
   local url = vim.fn.input("Git Repository URL: ")
   local path = vim.fn.input(string.format("Clone to Directory (default: %s): ", default_clone_dir))
 
@@ -106,29 +74,19 @@ keymap.set("n", "<leader>gC", function()
         vim.notify("Cloned and changed directory to: " .. path, vim.log.levels.INFO)
       end
     else
-      vim.notify("Error cloning repository:\n" .. result, vim.log.levels.ERROR)
+      vim.notify("ERROR: Cloning repository:\n" .. result, vim.log.levels.ERROR)
     end
   end
 end, { desc = "Clone Git Repository" })
 
--- Find and Replace (without confirmation)
-vim.keymap.set("v", "<leader>rn", '"hy:%s/<C-r>h//g<left><left>', { desc = "Rename selected text" })
-vim.keymap.set("n", "<leader>rn", ":%s/<C-r>=expand('<cword>')<CR>//g<left><left>", { desc = "Rename current word" })
-
--- Find and Replace (with confirmation)
-vim.keymap.set("v", "<leader>rN", '"hy:%s/<C-r>h//gc<left><left>', { desc = "Rename selected text with confirmation" })
-vim.keymap.set(
-  "n",
-  "<leader>rN",
-  ":%s/<C-r>=expand('<cword>')<CR>//gc<left><left><left>",
-  { desc = "Rename current word with confirmation" }
-)
-
--- Sort selected lines
-vim.keymap.set("v", "<leader>rS", "<cmd>sort<cr>", { desc = "Sort selected lines" })
+--Inc-Rename
+vim.keymap.set("n", "<leader>rn", ":IncRename", { desc = "Rename (from scratch)" })
+vim.keymap.set("n", "<leader>rN", function()
+  return ":IncRename " .. vim.fn.expand("<cword>")
+end, { expr = true, desc = "Rename (from word)" })
 
 --Telescope (Hidden Files)
-keymap.set(
+vim.keymap.set(
   "n",
   "<leader>fh",
   ":Telescope find_files hidden=true<CR>",
@@ -137,31 +95,22 @@ keymap.set(
 
 --Snacks Explorer
 ---Find visible files
-keymap.set("n", "<leader>e", function()
+vim.keymap.set("n", "<leader>e", function()
   require("snacks.explorer").open({ hidden = false, cwd = LazyVim.root() })
 end, { noremap = true, silent = true, desc = "Explorer Snacks (root)" })
-keymap.set("n", "<leader>E", function()
+vim.keymap.set("n", "<leader>E", function()
   require("snacks.explorer").open({ hidden = false, cwd = vim.fn.getcwd() })
 end, { noremap = true, silent = true, desc = "Explorer Snacks (cwd)" })
 ---Find hidden files
-keymap.set("n", "<leader>fe", function()
+vim.keymap.set("n", "<leader>fe", function()
   require("snacks.explorer").open({ hidden = true, cwd = LazyVim.root() })
 end, { noremap = true, silent = true, desc = "Explorer Snacks (root -hidden)" })
-keymap.set("n", "<leader>fE", function()
+vim.keymap.set("n", "<leader>fE", function()
   require("snacks.explorer").open({ hidden = true, cwd = vim.fn.getcwd() })
 end, { noremap = true, silent = true, desc = "Explorer Snacks (cwd -hidden)" })
 
--- Fzf Lua
-keymap.set("n", "<leader>f/", ":FzfLua<CR>")
-
--- Huefy
-keymap.set({ "n", "v" }, "<leader>cp", "<cmd>Huefy<cr>", { desc = "Pick a color" })
-keymap.set({ "n", "v" }, "<leader>cP", "<cmd>Shades<cr>", { desc = "Convert a color" })
-
--- Clear all marks
-vim.keymap.set("n", "<Leader>dm", function()
-  vim.cmd.delmarks("a-z")
-  vim.cmd.delmarks("A-Z0-9")
-  vim.cmd.wshada("!") -- Force write to shada file
-  print("All marks cleared.")
-end, { desc = "Delete all marks" })
+--Navigate vim panes better
+vim.keymap.set("n", "<c-h>", ":wincmd h<CR>")
+vim.keymap.set("n", "<c-j>", ":wincmd j<CR>")
+vim.keymap.set("n", "<c-k>", ":wincmd k<CR>")
+vim.keymap.set("n", "<c-l>", ":wincmd l<CR>")
