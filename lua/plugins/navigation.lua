@@ -73,9 +73,7 @@ return {
     "notjedi/nvim-rooter.lua",
     lazy = true,
     event = "VeryLazy",
-    config = function()
-      require("nvim-rooter").setup()
-    end,
+    opts = {},
   },
 
   -- Oil: File manager that treats directories as editable buffers
@@ -142,19 +140,19 @@ return {
       },
     },
     -- 👇 if you use `open_for_directories=true`, this is recommended
-    init = function()
-      -- More details: https://github.com/mikavilpas/yazi.nvim/issues/802
-      -- vim.g.loaded_netrw = 1
-      -- vim.g.loaded_netrwPlugin = 1
-    end,
+    -- init = function()
+    --   -- More details: https://github.com/mikavilpas/yazi.nvim/issues/802
+    --   -- vim.g.loaded_netrw = 1
+    --   -- vim.g.loaded_netrwPlugin = 1
+    -- end,
   },
-  -- Fzf lua
-  {
-    "ibhagwan/fzf-lua",
-    -- optional for icon support
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    -- or if using mini.icons/mini.nvim
-    -- dependencies = { "nvim-mini/mini.icons" },
-    opts = {},
-  },
+  -- -- Fzf lua
+  -- {
+  --   "ibhagwan/fzf-lua",
+  --   -- optional for icon support
+  --   dependencies = { "nvim-tree/nvim-web-devicons" },
+  --   -- dependencies = { "nvim-mini/mini.icons" },
+  --   cmd = "FzfLua",
+  --   opts = {},
+  -- },
 }

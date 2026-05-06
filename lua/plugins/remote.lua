@@ -8,6 +8,8 @@ return {
     -- Remote SSHFS Mount/Unmount
     -- "uhs-robert/sshfs.nvim",
     dir = vim.g.github .. "/sshfs.nvim/",
+    lazy = true,
+    event = "VeryLazy",
     opts = {
       global_paths = {
         "~/.config",
@@ -38,16 +40,16 @@ return {
         --   -- "/var/www/civil-communicator-server/",
         -- },
       },
-      -- hooks = {
-      --   on_exit = {
-      --     auto_unmount = true,        -- auto-disconnect all mounts on :q or exit
-      --     clean_mount_folders = true, -- optionally clean up mount folders after disconnect
-      --   },
-      --   on_mount = {
-      --     auto_change_to_dir = false, -- auto-change current directory to mount point
-      --     auto_run = "find",          -- "find" (default), "grep", "live_find", "live_grep", "terminal", "none", or a custom function(ctx)
-      --   },
-      -- },
+      hooks = {
+        on_exit = {
+          auto_unmount = false, -- auto-disconnect all mounts on :q or exit
+          clean_mount_folders = true, -- optionally clean up mount folders after disconnect
+        },
+        -- on_mount = {
+        --   auto_change_to_dir = false, -- auto-change current directory to mount point
+        --   auto_run = "find",          -- "find" (default), "grep", "live_find", "live_grep", "terminal", "none", or a custom function(ctx)
+        -- },
+      },
       ui = {
         local_picker = {
           preferred_picker = "auto", -- one of: "auto", "snacks", "fzf-lua", "mini", "telescope", "oil", "neo-tree", "nvim-tree", "yazi", "lf", "nnn", "ranger", "netrw"

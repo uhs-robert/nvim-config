@@ -1,3 +1,4 @@
+-- lua/plugins/git.lua
 -- Git integration and version control tools
 -- Contains plugins for git diffs, signs, GitHub integration, and repository management
 return {
@@ -8,9 +9,7 @@ return {
     lazy = true,
     cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory" },
     enabled = true,
-    config = function()
-      require("diffview").setup()
-    end,
+    opts = {},
   },
 
   -- Open GitHub URL: Quick navigation to GitHub from code
@@ -18,8 +17,6 @@ return {
   {
     "tetzng/open-github-url.nvim",
     lazy = true,
-
-    -- recommended
     keys = {
       {
         "<leader>gw",
@@ -27,10 +24,7 @@ return {
         desc = "Open GitHub URL under cursor",
       },
     },
-
-    config = function()
-      require("open-github-url").setup()
-    end,
+    opts = {},
   },
 
   -- GitSigns: Git status in the sign column

@@ -12,8 +12,10 @@ return {
       highlight = { enable = true }, ---@type lazyvim.TSFeat
       folds = { enable = true }, ---@type lazyvim.TSFeat
       ensure_installed = {
+        "astro",
         "bash",
         "c",
+        "css",
         "diff",
         "gotmpl",
         "html",
@@ -41,45 +43,15 @@ return {
     },
   },
 
-  -- -- UFO: Advanced folding with treesitter and LSP integration
-  -- -- Provides intelligent code folding with peek functionality and custom fold levels
-  -- {
-  --   "kevinhwang91/nvim-ufo",
-  --   dependencies = "kevinhwang91/promise-async",
-  --   config = function()
-  --     vim.o.foldcolumn = "1"
-  --     vim.o.foldlevel = 99
-  --     vim.o.foldlevelstart = 99
-  --     vim.o.foldenable = true
-  --
-  --     require("ufo").setup({
-  --       provider_selector = function(_, _, _)
-  --         return { "treesitter", "indent" }
-  --       end,
-  --     })
-  --
-  --     local ufo = require("ufo")
-  --
-  --     -- Keymaps using WhichKey labels
-  --     vim.keymap.set("n", "zR", ufo.openAllFolds, { desc = "Open all folds" })
-  --     vim.keymap.set("n", "zM", ufo.closeAllFolds, { desc = "Close all folds" })
-  --     vim.keymap.set("n", "zr", ufo.openFoldsExceptKinds, { desc = "Open folds (skip comments/imports)" })
-  --     vim.keymap.set("n", "zm", function()
-  --       ufo.closeFoldsWith(1)
-  --     end, { desc = "Close folds (level 1)" })
-  --   end,
-  -- },
-
-  -- Undotree: Visual undo history browser
-  -- Navigate through undo/redo history with a tree-like interface, toggle with <leader>U
-  -- {
-  --   "jiaoshijie/undotree",
-  --   dependencies = "nvim-lua/plenary.nvim",
-  --   config = true,
-  --   keys = { -- load the plugin only when using it's keybinding:
-  --     { "<leader>U", "<cmd>lua require('undotree').toggle()<cr>" },
-  --   },
-  -- },
+  -- MDX filetype with Treesitter highlighting
+  {
+    "davidmh/mdx.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    event = {
+      "BufReadPre *.mdx",
+      "BufNewFile *.mdx",
+    },
+  },
 
   -- Pretty Fold: Enhanced fold text display
   -- Improves the appearance of folded code blocks with better formatting
@@ -99,7 +71,7 @@ return {
       { "b", "<cmd>lua require('spider').motion('b')<cr>", mode = { "n", "x", "o" } },
     },
     opts = {
-      skipInsignificantPunctuation = false,
+      skipInsignificantPunctuation = true,
     },
   },
 
@@ -120,25 +92,6 @@ return {
   -- Improves the appearance and readability of Neovim's built-in help files
   {
     "OXY2DEV/helpview.nvim",
-    lazy = false,
+    lazy = true,
   },
-
-  -- -- Html/Ts Autotag: Use treesitter to autoclose and autorename html tag
-  -- {
-  --   "windwp/nvim-ts-autotag",
-  --   opts = {
-  --     -- Defaults
-  --     enable_close = true, -- Auto close tags
-  --     enable_rename = true, -- Auto rename pairs of tags
-  --     enable_close_on_slash = false, -- Auto close on trailing </
-  --   },
-  --   -- Also override individual filetype configs, these take priority.
-  --   -- Empty by default, useful if one of the "opts" global settings
-  --   -- doesn't work well in a specific filetype
-  --   per_filetype = {
-  --     ["html"] = {
-  --       enable_close = false,
-  --     },
-  --   },
-  -- },
 }

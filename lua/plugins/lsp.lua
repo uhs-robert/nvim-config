@@ -7,9 +7,7 @@ return {
   { -- plugin config for goto-preview
     "rmagatti/goto-preview",
     event = "LspAttach",
-    config = function()
-      require("goto-preview").setup({})
-    end,
+    opts = {},
   },
 
   -- -- LSP Config: ts_ls replaces vtsls (vtsls returns empty semantic token data)

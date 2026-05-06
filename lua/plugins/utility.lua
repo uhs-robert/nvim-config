@@ -32,12 +32,18 @@ return {
   {
     "NTBBloodbath/color-converter.nvim",
     opts = {},
-    config = function(_, opts)
-      local cc = require("color-converter")
-      cc.setup(opts)
-      vim.keymap.set("n", "<leader>rC", cc.cycle, { desc = "Cycle hex/rgb/hsl color" })
-    end,
+    keys = {
+      {
+        "<leader>rC",
+        function()
+          require("color-converter").cycle()
+        end,
+        mode = "n",
+        desc = "Cycle hex/rgb/hsl color",
+      },
+    },
   },
+
   {
     -- "uhs-robert/comment-filename.nvim",
     dir = vim.g.github .. "/comment-filename.nvim/",
@@ -47,15 +53,9 @@ return {
         html = true, -- careful with this one
       },
     },
-    config = function(_, opts)
-      require("comment_filename").setup(opts)
-      vim.keymap.set("n", "<leader>uy", "<cmd>CommentFilenameToggle<cr>", { desc = "Toggle Comment Filename (Global)" })
-      vim.keymap.set(
-        "n",
-        "<leader>uY",
-        "<cmd>CommentFilenameBufferToggle<cr>",
-        { desc = "Toggle Comment Filename (Buffer)" }
-      )
-    end,
+    keys = {
+      { "<leader>uy", "<cmd>CommentFilenameToggle<cr>", desc = "Toggle Comment Filename (Global)" },
+      { "<leader>uY", "<cmd>CommentFilenameBufferToggle<cr>", desc = "Toggle Comment Filename (Buffer)" },
+    },
   },
 }

@@ -10,21 +10,17 @@ return {
     "xzbdmw/colorful-menu.nvim",
     lazy = true,
     event = "InsertEnter",
-    config = function()
-      -- You don't need to set these options.
-      require("colorful-menu").setup({})
-    end,
+    opts = {},
   },
 
   -- Highlight Colors: Live color preview for CSS colors, hex codes, and other color functions
   {
     "brenoprata10/nvim-highlight-colors",
-    config = function()
-      require("nvim-highlight-colors").setup({
-        render = "background",
-        enable_tailwind = true,
-      })
-    end,
+    lazy = true,
+    opts = {
+      render = "background",
+      enable_tailwind = true,
+    },
   },
 
   -- Mini HiPatterns: Pattern-based syntax highlighting (hex colors disabled)
@@ -33,12 +29,10 @@ return {
     "nvim-mini/mini.hipatterns",
     lazy = true,
     event = "BufReadPost",
-    config = function()
-      require("mini.hipatterns").setup({
-        highlighters = {
-          hex_color = nil, -- This disables background hex coloring
-        },
-      })
-    end,
+    opts = {
+      highlighters = {
+        hex_color = nil, -- This disables background hex coloring
+      },
+    },
   },
 }

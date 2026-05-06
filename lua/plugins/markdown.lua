@@ -2,29 +2,47 @@
 -- Markdown rendering and enhancement tools
 -- Contains plugins for beautiful markdown preview, syntax highlighting, and callout support
 
--- Return info for hl_name or nil if it does not exist.
-local get_hl = function(hl_name)
-  local hl_info = vim.api.nvim_get_hl(0, { name = hl_name, link = false })
-  return not vim.tbl_isempty(hl_info) and hl_info or nil
+---@param name string highlight group name
+---@return vim.api.keyset.hl_info|nil
+local get_hl = function(name)
+  local ok, hl = pcall(vim.api.nvim_get_hl, 0, {
+    name = name,
+    link = false,
+  })
+
+  if not ok or vim.tbl_isempty(hl) then return nil end
+
+  return hl
 end
 
+---@param hl vim.api.keyset.hl_info
+---@return vim.api.keyset.hl_info
+local normalize_hl = function(hl)
+  return {
+    fg = hl.fg,
+    bg = hl.bg,
+    bold = hl.bold or nil,
+    italic = hl.italic or nil,
+    underline = hl.underline or nil,
+  }
+end
+
+--- Derives per-level RenderMarkdownH{1-6} highlight groups from treesitter heading highlights,
+--- falling back to @markup.heading or Title. Called once at startup and on ColorScheme changes.
 local setup_heading_hl_groups = function()
-  local fallback_hl_info = get_hl("@markup.heading") or get_hl("Title")
+  local fallback = get_hl("@markup.heading") or get_hl("Title")
 
-  for lvl = 1, 6 do
-    local hl_name = "@markup.heading." .. lvl
-    local hl_info = get_hl(hl_name .. ".markdown") or get_hl(hl_name) or fallback_hl_info
-    assert(hl_info, "Must set one of 'Title', '@markup.heading', '@markup.heading.N', or '@markup.heading.N.markdown'")
+  if not fallback then return end
 
-    local hl_spec = {}
-    if hl_info.fg then hl_spec.fg = hl_info.fg end
-    if hl_info.bg then hl_spec.bg = hl_info.bg end
-    if hl_info.bold then hl_spec.bold = true end
-    if hl_info.italic then hl_spec.italic = true end
+  for level = 1, 6 do
+    local hl = get_hl(("@markup.heading.%d.markdown"):format(level))
+      or get_hl(("@markup.heading.%d"):format(level))
+      or fallback
 
-    vim.api.nvim_set_hl(0, "RenderMarkdownH" .. lvl, hl_spec)
-    hl_spec.reverse = true
-    vim.api.nvim_set_hl(0, "RenderMarkdownH" .. lvl .. "Bg", hl_spec)
+    hl = normalize_hl(hl)
+
+    vim.api.nvim_set_hl(0, ("RenderMarkdownH%d"):format(level), hl)
+    vim.api.nvim_set_hl(0, ("RenderMarkdownH%dBg"):format(level), vim.tbl_extend("force", hl, { reverse = true }))
   end
 end
 
@@ -33,44 +51,66 @@ return {
   {
     "MeanderingProgrammer/render-markdown.nvim",
     enabled = true,
+    ft = { "markdown", "md", "mdx", "codecompanion" },
+
     -- dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" }, -- if you use the mini.nvim suite
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.icons" }, -- if you use standalone mini plugins
     -- dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
-    config = function()
-      require("render-markdown").setup({
-        file_types = { "markdown", "md", "codecompanion" },
-        render_modes = { "n", "no", "c", "t", "i", "ic" },
-        code = {
-          sign = false,
-          border = "thin",
-          position = "right",
-          width = "block",
-          above = "▁",
-          below = "▔",
-          language_left = "█",
-          language_right = "█",
-          language_border = "▁",
-          left_pad = 1,
-          right_pad = 1,
-        },
-        heading = {
-          sign = false,
-          width = "block",
-          left_pad = 1,
-          right_pad = 0,
-          position = "right",
-          icons = function(ctx)
-            return (""):rep(ctx.level) .. ""
-          end,
-        },
+
+    init = function()
+      local group = vim.api.nvim_create_augroup("RenderMarkdownHeadingHighlights", {
+        clear = true,
       })
 
-      setup_heading_hl_groups()
-      vim.api.nvim_create_autocmd("Colorscheme", {
-        desc = "Setup up heading hl groups for render markdown.",
-        callback = setup_heading_hl_groups,
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        group = group,
+        desc = "Set render-markdown heading highlight groups",
+        callback = function()
+          vim.schedule(setup_heading_hl_groups)
+        end,
       })
-      require("render-markdown").setup({})
+
+      vim.api.nvim_create_autocmd("User", {
+        group = group,
+        pattern = "VeryLazy",
+        desc = "Refresh render-markdown heading highlight groups after lazy UI setup",
+        callback = function()
+          vim.schedule(setup_heading_hl_groups)
+        end,
+      })
     end,
+
+    config = function(_, opts)
+      require("render-markdown").setup(opts)
+      setup_heading_hl_groups()
+    end,
+
+    opts = {
+      file_types = { "markdown", "md", "mdx", "codecompanion" },
+      render_modes = { "n", "no", "c", "t", "i", "ic" },
+      code = {
+        sign = false,
+        border = "thin",
+        position = "right",
+        width = "block",
+        above = "▁",
+        below = "▔",
+        language_left = "█",
+        language_right = "█",
+        language_border = "▁",
+        left_pad = 1,
+        right_pad = 1,
+      },
+      heading = {
+        sign = false,
+        width = "block",
+        left_pad = 1,
+        right_pad = 0,
+        position = "right",
+        icons = function(ctx)
+          return (""):rep(ctx.level) .. ""
+        end,
+      },
+    },
   },
 }
