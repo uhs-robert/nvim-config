@@ -1,25 +1,22 @@
 -- lua/plugins/core.lua
 
-local uid = (vim.uv or vim.loop).getuid()
-local is_root = uid == 0
-local is_remote = vim.env.SSH_CONNECTION ~= nil or vim.env.SSH_TTY ~= nil
-local is_sudoedit = (not is_root) and vim.env.SUDOEDIT == "1"
+local UID = (vim.uv or vim.loop).getuid()
+local IS_SUDOEDIT = vim.env.SUDOEDIT == "1"
+local IS_ROOT = IS_SUDOEDIT or UID == 0
 
-local function pick_colorscheme()
-  local is_elevated = is_root or is_sudoedit
-  if is_remote then
-    return is_elevated and "oasis-abyss" or "oasis-mirage"
-  else
-    return is_elevated and "oasis-sol" or "oasis"
-  end
+local get_startup_colorscheme = function()
+  local cwd = vim.uv.cwd() or ""
+  if IS_ROOT then return "oasis-scorpion" end
+  if vim.startswith(cwd, vim.fs.normalize("~/mnt/")) then return "oasis-mirage" end
+
+  return "oasis"
 end
 
 return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "oasis",
-      -- colorscheme = pick_colorscheme(),
+      colorscheme = get_startup_colorscheme(),
       news = {
         lazyvim = true,
         neovim = true,

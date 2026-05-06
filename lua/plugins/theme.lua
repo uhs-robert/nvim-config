@@ -1,6 +1,10 @@
 -- lua/plugins/theme.lua
 -- Themes and thematic elements
 -- Contains colorschemes, status lines, and elements which use themes
+--
+local UID = (vim.uv or vim.loop).getuid()
+local IS_SUDOEDIT = vim.env.SUDOEDIT == "1"
+local IS_ROOT = IS_SUDOEDIT or UID == 0
 
 return {
   -- -- Melange
@@ -15,160 +19,111 @@ return {
   -- mfd.nvim
   {
     "kungfusheep/mfd.nvim",
-    config = function()
-      require("mfd").setup({
-        accessibility_contrast = 2,
-      })
-    end,
+    lazy = true,
+    opts = { accessibility_contrast = 2 },
   },
 
   {
     -- "uhs-robert/color-chameleon.nvim",
     dir = vim.g.github .. "/color-chameleon.nvim/",
-    lazy = false,
-    priority = 900,
-    config = function()
-      local uid = (vim.uv or vim.loop).getuid()
-      local is_sudoedit = vim.env.SUDOEDIT == "1" -- This requires your shell's config to export a flag like: SUDO_EDITOR="env SUDOEDIT=1 /usr/bin/nvim"
-      local is_root = is_sudoedit or uid == 0
-
-      -- stylua: ignore start
-      require("color-chameleon").setup({
-        enabled = true,
-        rules = {
-          { colorscheme = "oasis-scorpion", condition = function() return is_root end },
-          { path = "~/mnt/", colorscheme = "oasis-mirage" },
+    lazy = true,
+    event = "VeryLazy",
+    opts = {
+      enabled = true,
+      set_on_startup = false,
+      rules = {
+        {
+          colorscheme = "oasis-scorpion",
+          condition = function()
+            return IS_ROOT
+          end,
         },
-        default = "oasis",
-      })
-      -- stylua: ignore end
-
-      -- -- stylua: ignore start
-      -- require("color-chameleon").setup({
-      --   enabled = true,
-      --   rules = {
-      --     { colorscheme = "oasis-sol", condition = function() return is_root end },
-      --     { path = "~/mnt/", colorscheme = "oasis-canyon" },
-      --     { path = "~/demo/project-a/", colorscheme = "oasis-desert" },
-      --     { filetype = "markdown", colorscheme = "oasis-twilight" },
-      --     { buftype = "terminal", colorscheme = "oasis-cactus" },
-      --   },
-      --   default = "oasis-lagoon"
-      -- })
-      -- -- stylua: ignore end
-
-      -- Demo helper: Show directory and colorscheme on buffer enter
-      -- local first_enter = true
-      -- vim.api.nvim_create_autocmd({ "BufEnter", "TermOpen" }, {
-      --   callback = function()
-      --     if first_enter then
-      --       first_enter = false
-      --       return
-      --     end
-      --     local bufname = vim.fn.expand("%")
-      --     if bufname == "" then
-      --       return -- Skip empty buffers
-      --     end
-      --     local bufdir = vim.fn.expand("%:p:h") -- Buffer's directory
-      --     local colorscheme = vim.g.colors_name or "none"
-      --     vim.api.nvim_echo({
-      --       { "📂 " .. bufdir, "Normal" },
-      --       { "\n🎨 " .. colorscheme, "Normal" },
-      --     }, false, {})
-      --   end,
-      -- })
-    end,
+        { path = "~/mnt/", colorscheme = "oasis-mirage" },
+      },
+      default = "oasis",
+    },
   },
+
   -- Oasis
   {
     -- "uhs-robert/oasis.nvim",
     dir = vim.g.github .. "/oasis.nvim/",
     lazy = false,
     priority = 1000,
-    config = function()
-      require("oasis").setup({
-        style = "moonlight",
-        -- dark_style = "sol",
-        -- light_style = "night",
-        -- light_intensity = 3,
-        -- dark_intensity = 2,
-        contrast = {
-          -- min_ratio = 5.8,
-          -- force_aaa = false,
+    opts = {
+      style = "moonlight",
+      -- dark_style = "sol",
+      -- light_style = "night",
+      -- light_intensity = 3,
+      -- dark_intensity = 2,
+      contrast = {
+        -- min_ratio = 5.8,
+        -- force_aaa = false,
+      },
+      -- themes = {
+      --   sol = {
+      --     dark_intensity = 5,
+      --   },
+      -- },
+      integrations = {
+        plugins = {
+          -- snacks = false,
         },
-        themes = {
-          sol = {
-            dark_intensity = 5,
-          },
-        },
-        integrations = {
-          plugins = {
-            -- snacks = false,
-          },
-        },
-        -- themed_syntax = false,
-        -- use_legacy_comments = true,
-        -- styles = {
-        --   italic = false,
-        --   underline = false,
-        --   undercurl = false,
-        --   bold = false,
-        --   strikethrough = false,
-        -- },
-        -- terminal_colors = false,
-        -- transparent = true,
-        highlight_overrides = function(c, colors)
-          ---@type OasisHighlightOverrides
-          return {
-            -- Comment = { fg = c.fg.dim },
-            -- desert = {
-            --   Comment = { fg = c.syntax.preproc },
-            -- },
-            -- lagoon = {
-            --   light_3 = {
-            --     Comment = { fg = "#FFF000" },
-            --   },
-            -- },
-            -- light = {
-            --   Comment = { fg = "#FF0000" },
-            -- },
-            -- light_5 = {
-            --   Comment = { fg = "#FFA000" },
-            -- },
-          }
-        end,
-        palette_overrides = function(c, colors)
-          ---@type OasisPaletteOverrides
-          return {
-            -- night = {
-            --   bg = colors.theme.midnight.bg,
-            -- },
-            -- desert = {
-            --   syntax = {
-            --     string = colors.rose[500],
-            --   },
-            -- },
-          }
-        end,
-      })
-      -- Light intensity
-      vim.keymap.set("n", "<leader>Cl", function()
-        require("oasis").cycle_intensity()
-      end, { desc = "Cycle Oasis light mode intensity" })
-
-      -- Dark intensity
-      vim.keymap.set("n", "<leader>Cb", function()
-        require("oasis").cycle_dark_intensity()
-      end, { desc = "Cycle Oasis light mode intensity" })
-
-      -- require("oasis").setup()
-    end,
+      },
+      -- themed_syntax = false,
+      -- use_legacy_comments = true,
+      -- styles = {
+      --   italic = false,
+      --   underline = false,
+      --   undercurl = false,
+      --   bold = false,
+      --   strikethrough = false,
+      -- },
+      -- terminal_colors = false,
+      -- transparent = true,
+      highlight_overrides = function(c, colors)
+        ---@type OasisHighlightOverrides
+        return {
+          -- Comment = { fg = c.fg.dim },
+          -- desert = {
+          --   Comment = { fg = c.syntax.preproc },
+          -- },
+          -- lagoon = {
+          --   light_3 = {
+          --     Comment = { fg = "#FFF000" },
+          --   },
+          -- },
+          -- light = {
+          --   Comment = { fg = "#FF0000" },
+          -- },
+          -- light_5 = {
+          --   Comment = { fg = "#FFA000" },
+          -- },
+        }
+      end,
+      palette_overrides = function(c, colors)
+        ---@type OasisPaletteOverrides
+        return {
+          -- night = {
+          --   bg = colors.theme.midnight.bg,
+          -- },
+          -- desert = {
+          --   syntax = {
+          --     string = colors.rose[500],
+          --   },
+          -- },
+        }
+      end,
+    },
+    keys = {
+      { "<leader>Cl", "<cmd>OasisIntensity<cr>", desc = "Oasis Intensity" },
+    },
   },
 
   -- All Your Base
   -- {
   --   -- "uhs-robert/allyourbase.nvim",
-  --   dir = vim.env.HOME .. "/Documents/github-uphill/allyourbase.nvim/",
+  --   dir = vim.env.HOME .. "/Development/allyourbase.nvim/",
   --   lazy = false,
   --   priority = 1000,
   --   config = function()
@@ -191,6 +146,8 @@ return {
   -- Lualine: Enhanced statusline with time display and file manager integration
   {
     "nvim-lualine/lualine.nvim",
+    lazy = true,
+    event = "LazyFile",
     opts = function(_, opts)
       opts.options.theme = "oasis"
       opts.sections = vim.tbl_deep_extend("force", opts.sections or {}, {
@@ -217,7 +174,9 @@ return {
   -- Tabby: Enhanced tab viewer with slanted element design and which-key binds
   {
     "nanozuki/tabby.nvim",
-    lazy = false,
+    lazy = true,
+    event = "VimEnter",
+    -- event = "VeryLazy",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     init = function()
       -- always show tabline; sessions will restore tab pages + names
@@ -233,26 +192,42 @@ return {
         -- lualine_theme = "auto",
       },
     },
-    config = function(_, opts)
-      require("tabby").setup(opts)
-      local map = vim.keymap.set
-      local optsn = { silent = true, noremap = true }
-
-      -- next / prev tab
-      map("n", "<leader><tab>h", ":tabp<CR>", vim.tbl_extend("force", optsn, { desc = "Prev tab" }))
-
-      -- close (delete)
-      map("n", "<leader><tab>d", ":tabclose<CR>", vim.tbl_extend("force", optsn, { desc = "Delete tab" }))
-
-      -- move next / prev
-      map("n", "<leader><tab>L", ":+tabmove<CR>", vim.tbl_extend("force", optsn, { desc = "Move tab right" }))
-      map("n", "<leader><tab>H", ":-tabmove<CR>", vim.tbl_extend("force", optsn, { desc = "Move tab left" }))
-
-      -- pick window (Tabby)
-      map("n", "<leader><tab>w", ":Tabby pick_window<CR>", vim.tbl_extend("force", optsn, { desc = "Pick tab window" }))
-
-      -- jump mode (Tabby) on f
-      map("n", "<leader><tab>j", ":Tabby jump_to_tab<CR>", vim.tbl_extend("force", optsn, { desc = "Jump to tab" }))
-    end,
+    keys = {
+      {
+        "<leader><tab>h",
+        "<cmd>tabprevious<cr>",
+        desc = "Prev tab",
+      },
+      {
+        "<leader><tab>l",
+        "<cmd>tabnext<cr>",
+        desc = "Next tab",
+      },
+      {
+        "<leader><tab>d",
+        "<cmd>tabclose<cr>",
+        desc = "Delete tab",
+      },
+      {
+        "<leader><tab>L",
+        "<cmd>+tabmove<cr>",
+        desc = "Move tab right",
+      },
+      {
+        "<leader><tab>H",
+        "<cmd>-tabmove<cr>",
+        desc = "Move tab left",
+      },
+      {
+        "<leader><tab>w",
+        "<cmd>Tabby pick_window<cr>",
+        desc = "Pick tab window",
+      },
+      {
+        "<leader><tab>j",
+        "<cmd>Tabby jump_to_tab<cr>",
+        desc = "Jump to tab",
+      },
+    },
   },
 }
