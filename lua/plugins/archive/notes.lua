@@ -1,0 +1,48 @@
+-- Neorg note-taking and organization system (currently disabled)
+-- Advanced note-taking plugin with structured markup, task management, and presentation features
+return {
+  -- Neorg: Comprehensive note-taking and organization system with structured markup
+  -- Features workspaces, task management, exports, presentations, and advanced text objects
+  -- {
+  --   "nvim-neorg/neorg",
+  --   lazy = false,
+  --   version = "*",
+  --   config = function()
+  --     require("neorg").setup({
+  --       load = {
+  --         ["core.defaults"] = {},
+  --         ["core.dirman"] = {
+  --           config = {
+  --             workspaces = {
+  --               personal = "~/Documents/Notes/personal",
+  --               work = "~/Documents/Notes/work",
+  --             },
+  --             index = "index.norg",
+  --             default_workspace = "work",
+  --           },
+  --         },
+  --         -- ["core.completion"] = {
+  --         --   config = {
+  --         --     engine = "nvim-cmp",
+  --         --   },
+  --         -- },
+  --         ["core.concealer"] = {
+  --           config = {
+  --             icon_preset = "diamond",
+  --           },
+  --         },
+  --         ["core.export"] = {},
+  --         ["core.export.markdown"] = {},
+  --         -- ["core.latex.renderer"] = {},
+  --         ["core.presenter"] = {
+  --           config = {
+  --             zen_mode = "zen-mode",
+  --           },
+  --         },
+  --         ["core.summary"] = {},
+  --         ["core.text-objects"] = {},
+  --       },
+  --     })
+  --   end,
+  -- },
+}
