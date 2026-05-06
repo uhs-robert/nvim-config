@@ -8,3 +8,6 @@ vim.opt.wrap = true
 vim.opt.scrolloff = 8 -- Lines of context
 vim.opt.sidescrolloff = 8 -- Columns of context
 vim.o.showtabline = 2
+
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
