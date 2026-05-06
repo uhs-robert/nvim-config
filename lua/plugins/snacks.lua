@@ -34,5 +34,42 @@ return {
       },
       words = { enabled = true },
     },
+    keys = {
+      {
+        "<leader>1",
+        function()
+          if vim.bo.filetype ~= "snacks_dashboard" then require("snacks").dashboard.open() end
+        end,
+        desc = "Home",
+      },
+      {
+        "<leader>e",
+        function()
+          require("snacks.explorer").open({ hidden = false, cwd = LazyVim.root() })
+        end,
+        desc = "Explorer Snacks (root)",
+      },
+      {
+        "<leader>E",
+        function()
+          require("snacks.explorer").open({ hidden = false, cwd = vim.fn.getcwd() })
+        end,
+        desc = "Explorer Snacks (cwd)",
+      },
+      {
+        "<leader>fe",
+        function()
+          require("snacks.explorer").open({ hidden = true, cwd = LazyVim.root() })
+        end,
+        desc = "Explorer Snacks (root -hidden)",
+      },
+      {
+        "<leader>fE",
+        function()
+          require("snacks.explorer").open({ hidden = true, cwd = vim.fn.getcwd() })
+        end,
+        desc = "Explorer Snacks (cwd -hidden)",
+      },
+    },
   },
 }

@@ -94,4 +94,21 @@ return {
     "OXY2DEV/helpview.nvim",
     lazy = true,
   },
+
+  -- Inc-Rename
+  {
+    "smjonas/inc-rename.nvim",
+    opts = {},
+    keys = {
+      { "<leader>rn", ":IncRename ", desc = "IncRename" },
+      {
+        "<leader>rn",
+        function()
+          return ":IncRename " .. vim.fn.expand("<cword>")
+        end,
+        expr = true,
+        desc = "IncRename (word)",
+      },
+    },
+  },
 }

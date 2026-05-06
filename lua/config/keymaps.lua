@@ -3,13 +3,6 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
-local wk = require("which-key")
-
--- Fixes for missing icons in which-key
--- wk.add({
---   { "<leader>o", desc = "overseer", icon = { icon = "󱢇", color = "red", h1 = "WhichKey" } },
--- })
-
 -- Change directory to the active file
 vim.keymap.set("n", "<leader>cd", function()
   vim.cmd("cd %:p:h")
@@ -36,16 +29,6 @@ vim.keymap.set(
   ":noautocmd w<CR>",
   { noremap = true, silent = true, desc = "Save file (no formatting)" }
 )
-
---Return to Snacks Dashboard
-vim.keymap.set("n", "<leader>1", function()
-  if vim.bo.filetype ~= "snacks_dashboard" then pcall(function()
-    require("snacks").dashboard.open()
-  end) end
-end, { desc = "Home" })
-wk.add({
-  { "<leader>1", icon = { icon = "", color = "blue", h1 = "WhichKey" } },
-})
 
 -- Github Clone Repository
 vim.keymap.set("n", "<leader>gC", function()
@@ -78,36 +61,6 @@ vim.keymap.set("n", "<leader>gC", function()
     end
   end
 end, { desc = "Clone Git Repository" })
-
---Inc-Rename
-vim.keymap.set("n", "<leader>rn", ":IncRename", { desc = "Rename (from scratch)" })
-vim.keymap.set("n", "<leader>rN", function()
-  return ":IncRename " .. vim.fn.expand("<cword>")
-end, { expr = true, desc = "Rename (from word)" })
-
---Telescope (Hidden Files)
-vim.keymap.set(
-  "n",
-  "<leader>fh",
-  ":Telescope find_files hidden=true<CR>",
-  { noremap = true, silent = true, desc = "Find Files (Hidden)" }
-)
-
---Snacks Explorer
----Find visible files
-vim.keymap.set("n", "<leader>e", function()
-  require("snacks.explorer").open({ hidden = false, cwd = LazyVim.root() })
-end, { noremap = true, silent = true, desc = "Explorer Snacks (root)" })
-vim.keymap.set("n", "<leader>E", function()
-  require("snacks.explorer").open({ hidden = false, cwd = vim.fn.getcwd() })
-end, { noremap = true, silent = true, desc = "Explorer Snacks (cwd)" })
----Find hidden files
-vim.keymap.set("n", "<leader>fe", function()
-  require("snacks.explorer").open({ hidden = true, cwd = LazyVim.root() })
-end, { noremap = true, silent = true, desc = "Explorer Snacks (root -hidden)" })
-vim.keymap.set("n", "<leader>fE", function()
-  require("snacks.explorer").open({ hidden = true, cwd = vim.fn.getcwd() })
-end, { noremap = true, silent = true, desc = "Explorer Snacks (cwd -hidden)" })
 
 --Navigate vim panes better
 vim.keymap.set("n", "<c-h>", ":wincmd h<CR>")
