@@ -11,6 +11,32 @@ local HEADERS = {
  ]],
 }
 
+-- Hide default colorschemes from Snacks Picker
+local hidden_colorschemes = {
+  blue = true,
+  darkblue = true,
+  -- default = true,
+  delek = true,
+  -- desert = true,
+  elflord = true,
+  -- evening = true,
+  industry = true,
+  -- koehler = true,
+  morning = true,
+  murphy = true,
+  -- lunaperche = true,
+  pablo = true,
+  peachpuff = true,
+  quiet = true,
+  ron = true,
+  shine = true,
+  -- slate = true,
+  torte = true,
+  unokai = true,
+  zaibatsu = true,
+  zellner = true,
+}
+
 -- Dashboard configuration and startup screen customization
 -- Contains Snacks.nvim dashboard setup with UpHill Solutions branding and custom theming
 return {
@@ -69,6 +95,21 @@ return {
           require("snacks.explorer").open({ hidden = true, cwd = vim.fn.getcwd() })
         end,
         desc = "Explorer Snacks (cwd -hidden)",
+      },
+      {
+        "<leader>uC",
+        function()
+          Snacks.picker.colorschemes({
+            transform = function(item)
+              local name = item.text or item.name
+
+              if hidden_colorschemes[name] then return false end
+
+              return item
+            end,
+          })
+        end,
+        desc = "Colorschemes",
       },
     },
   },
