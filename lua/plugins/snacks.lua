@@ -25,7 +25,7 @@ return {
           ---@diagnostic disable-next-line: assign-type-mismatch
           { padding = 0, align = "center", text = { HEADERS.neovim, hl = "header" } },
           ---@diagnostic disable-next-line: assign-type-mismatch
-          { padding = 2, align = "center", text = { "[ https://uphillsolutions.tech ]", hl = "Identifier" } },
+          { padding = 2, align = "center", text = { "[ https://uphillsolutions.tech ]", hl = "OasisAccent" } },
           { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
           { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
           { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
