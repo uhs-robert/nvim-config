@@ -1,0 +1,4 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LuaLS/lua-language-server/main/meta/template/schema.json",
+  "globals": ["local_plugin"]
+}

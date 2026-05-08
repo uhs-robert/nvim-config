@@ -24,8 +24,8 @@ return {
   },
 
   {
-    -- "uhs-robert/color-chameleon.nvim",
-    dir = vim.g.github .. "/color-chameleon.nvim/",
+    "uhs-robert/color-chameleon.nvim",
+    dir = local_plugin("color-chameleon.nvim"),
     lazy = true,
     event = "VeryLazy",
     opts = {
@@ -46,8 +46,8 @@ return {
 
   -- Oasis
   {
-    -- "uhs-robert/oasis.nvim",
-    dir = vim.g.github .. "/oasis.nvim/",
+    "uhs-robert/oasis.nvim",
+    dir = local_plugin("oasis.nvim"),
     lazy = false,
     priority = 1000,
     opts = {

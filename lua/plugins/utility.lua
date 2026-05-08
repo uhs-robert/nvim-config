@@ -31,6 +31,7 @@ return {
   -- },
   {
     "NTBBloodbath/color-converter.nvim",
+    lazy = true,
     opts = {},
     keys = {
       {
@@ -45,8 +46,8 @@ return {
   },
 
   {
-    -- "uhs-robert/comment-filename.nvim",
-    dir = vim.g.github .. "/comment-filename.nvim/",
+    "uhs-robert/comment-filename.nvim",
+    dir = local_plugin("comment-filename.nvim"),
     opts = {
       enabled = true,
       filetypes = {

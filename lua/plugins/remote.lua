@@ -5,9 +5,8 @@ return {
   -- SSHFS: Remote filesystem mounting and management
   -- Mount remote directories via SSHFS with integrated file picker support (Yazi)
   {
-    -- Remote SSHFS Mount/Unmount
-    -- "uhs-robert/sshfs.nvim",
-    dir = vim.g.github .. "/sshfs.nvim/",
+    "uhs-robert/sshfs.nvim",
+    dir = local_plugin("sshfs.nvim"),
     lazy = true,
     event = "VeryLazy",
     opts = {
