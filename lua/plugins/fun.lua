@@ -3,6 +3,16 @@
 -- Contains games, typing practice, and entertainment features for Neovim
 return {
   {
+    "sphamba/smear-cursor.nvim",
+    event = "VeryLazy",
+    cond = vim.env.KITTY_WINDOW_ID == nil and vim.g.neovide == nil,
+    opts = {
+      cursor_color = "#f0e68c",
+      never_draw_over_target = true,
+      hide_target_hack = true,
+    },
+  },
+  {
     "rachartier/tiny-glimmer.nvim",
     lazy = true,
     event = "LazyFile",
