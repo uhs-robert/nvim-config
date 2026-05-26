@@ -18,7 +18,7 @@ end, { noremap = true, silent = true, desc = "Change directory to open file" })
 vim.keymap.set(
   "n",
   "<leader>fo",
-  ":!dolphin %:p:h<CR>",
+  ":!thunar %:p:h<CR>",
   { noremap = true, silent = true, desc = "Open in file explorer" }
 )
 

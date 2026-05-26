@@ -164,7 +164,7 @@ return {
         for _, section in ipairs(opts.sections.lualine_c) do
           section.on_click = function()
             local file_path = vim.fn.expand("%:p:h") -- Get file's directory
-            vim.fn.jobstart({ "dolphin", file_path }, { detach = true }) -- Open Dolphin
+            vim.fn.jobstart({ "thunar", file_path }, { detach = true }) -- Open Thunar
           end
         end
       end
