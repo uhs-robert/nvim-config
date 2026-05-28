@@ -24,7 +24,14 @@ return {
           },
         },
         -- Lua
-        lua_ls = { -- Use "lua_ls" here
+        lua_ls = {
+          root_dir = function(bufnr, on_dir)
+            local fname = vim.api.nvim_buf_get_name(bufnr)
+            local luarc = vim.fs.find(".luarc.json", { path = fname, upward = true })[1]
+            local dir = luarc and vim.fn.fnamemodify(luarc, ":h")
+              or require("lspconfig.util").root_pattern(".git")(fname)
+            on_dir(dir)
+          end,
           settings = {
             Lua = {
               runtime = {
