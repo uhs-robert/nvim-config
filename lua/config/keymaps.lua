@@ -62,8 +62,8 @@ vim.keymap.set("n", "<leader>gC", function()
   end
 end, { desc = "Clone Git Repository" })
 
---Navigate vim panes better
-vim.keymap.set("n", "<c-h>", ":wincmd h<CR>")
-vim.keymap.set("n", "<c-j>", ":wincmd j<CR>")
-vim.keymap.set("n", "<c-k>", ":wincmd k<CR>")
-vim.keymap.set("n", "<c-l>", ":wincmd l<CR>")
+--Navigate vim panes with ctrl
+vim.keymap.set("n", "<c-h>", "<C-w>h", { silent = true })
+vim.keymap.set("n", "<c-j>", "<C-w>j", { silent = true })
+vim.keymap.set("n", "<c-k>", "<C-w>k", { silent = true })
+vim.keymap.set("n", "<c-l>", "<C-w>l", { silent = true })
