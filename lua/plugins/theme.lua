@@ -171,6 +171,16 @@ return {
     end,
   },
 
+  -- mini.tabline: test-only tabline for oasis
+  -- {
+  --   "nvim-mini/mini.nvim",
+  --   lazy = true,
+  --   event = "VimEnter",
+  --   config = function()
+  --     require("mini.tabline").setup()
+  --   end,
+  -- },
+
   -- Tabby: Enhanced tab viewer with slanted element design and which-key binds
   {
     "nanozuki/tabby.nvim",
