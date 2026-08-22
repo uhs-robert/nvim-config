@@ -7,8 +7,8 @@ local IS_SUDOEDIT = vim.env.SUDOEDIT == "1"
 local IS_ROOT = IS_SUDOEDIT or UID == 0
 
 return {
-  -- -- Melange
-  -- { "savq/melange-nvim" },
+  -- Melange
+  { "savq/melange-nvim", enabled = false },
   --
   -- -- Nightfox
   -- { "EdenEast/nightfox.nvim" },
@@ -17,11 +17,12 @@ return {
   -- { "rebelot/kanagawa.nvim" },
 
   -- mfd.nvim
-  {
-    "kungfusheep/mfd.nvim",
-    lazy = true,
-    opts = { accessibility_contrast = 2 },
-  },
+  -- {
+  --   "kungfusheep/mfd.nvim",
+  --   enabled = false,
+  --   lazy = true,
+  --   opts = { accessibility_contrast = 2 },
+  -- },
 
   {
     "uhs-robert/color-chameleon.nvim",
