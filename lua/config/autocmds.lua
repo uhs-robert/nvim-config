@@ -59,9 +59,10 @@ api.nvim_create_autocmd("FileType", {
 })
 
 -- Hyprlang LSP
-api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+api.nvim_create_autocmd("BufEnter", {
   pattern = { "*.hl", "hypr*.conf" },
-  callback = function(event)
+  desc = "Start Hyprlang LSP",
+  callback = function(_)
     vim.lsp.start({
       name = "hyprlang",
       cmd = { "hyprls" },
