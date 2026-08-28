@@ -139,6 +139,21 @@ return {
     },
   },
 
+  {
+    "uhs-robert/jewel.nvim",
+    dir = local_plugin("jewel.nvim"),
+    lazy = false,
+    priority = 1000,
+    opts = {
+      style = "diamond",
+      integrations = {
+        plugins = {
+          -- snacks = false,
+        },
+      },
+    },
+  },
+
   -- All Your Base
   -- {
   --   -- "uhs-robert/allyourbase.nvim",
