@@ -8,7 +8,7 @@ return {
       nes = { enabled = false },
       cli = {
         mux = {
-          enabled = true,
+          enabled = false,
           backend = "tmux",
         },
       },
