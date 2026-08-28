@@ -40,6 +40,24 @@ return {
           end,
         },
         { path = "~/mnt/", colorscheme = "oasis-mirage" },
+        {
+          -- Night time colorscheme
+          colorscheme = "oasis-night",
+          condition = function()
+            local hour = tonumber(os.date("%H"))
+            local month = tonumber(os.date("%m"))
+            local is_summer = month >= 5 and month <= 9
+            local is_winter = month == 12 or month <= 2
+
+            if is_summer then
+              return hour <= 6 or hour >= 18 -- Before 6AM, after 6PM
+            elseif is_winter then
+              return hour <= 7 or hour >= 16 -- Before 7AM, after 4PM
+            else
+              return hour <= 7 or hour >= 17 -- Before 7AM, after 5PM
+            end
+          end,
+        },
       },
       default = "oasis",
     },
