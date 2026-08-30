@@ -15,12 +15,17 @@ vim.keymap.set("n", "<leader>cd", function()
 end, { noremap = true, silent = true, desc = "Change directory to open file" })
 
 -- Format JSON with jq
-vim.keymap.set(
-  "n",
-  "<leader>cj",
-  ":%!jq .<CR>",
-  { noremap = true, silent = true, desc = "Format JSON with jq" }
-)
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "json",
+  callback = function(event)
+    vim.keymap.set(
+      "n",
+      "<leader>cj",
+      ":%!jq .<CR>",
+      { buffer = event.buf, noremap = true, silent = true, desc = "Format JSON with jq" }
+    )
+  end,
+})
 
 -- Open the current file in the file explorer
 vim.keymap.set(
