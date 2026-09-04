@@ -93,12 +93,36 @@ local function root_relative(path)
   return root .. "/" .. path
 end
 
+-- Realpath-based match: git_root() resolves symlinks, so a plain string
+-- comparison against a buffer opened through a symlinked path never matches.
+local function paths_match(buf_name, path)
+  if buf_name == root_relative(path) or buf_name == path .. " (deleted)" then return true end
+  local uv = vim.uv or vim.loop
+  local a, b = uv.fs_realpath(buf_name), uv.fs_realpath(root_relative(path))
+  return a ~= nil and a == b
+end
+
+-- Finds a buffer already open for `path` (matched by realpath, so a symlinked
+-- cwd doesn't cause a duplicate buffer to be opened for the same file).
+local function find_existing_buf(path)
+  local uv = vim.uv or vim.loop
+  local target = uv.fs_realpath(root_relative(path))
+  if not target then return nil end
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_loaded(buf) then
+      local name = vim.api.nvim_buf_get_name(buf)
+      if name ~= "" and uv.fs_realpath(name) == target then return name end
+    end
+  end
+  return nil
+end
+
 -- Resolves the current buffer's position in state.files, self-healing if the user
 -- manually switched buffers instead of using [r/]r.
 local function current_file_index()
   local buf_name = vim.api.nvim_buf_get_name(0)
   for i, file in ipairs(M.state.files) do
-    if buf_name == root_relative(file.path) or buf_name == file.path .. " (deleted)" then return i end
+    if paths_match(buf_name, file.path) then return i end
   end
   return M.state.file_index
 end
@@ -137,7 +161,8 @@ local function open_file_at_index(index)
   if file.status == "D" then
     open_deleted_file(file.path)
   else
-    vim.cmd.edit(vim.fn.fnameescape(root_relative(file.path)))
+    local target = find_existing_buf(file.path) or root_relative(file.path)
+    vim.cmd.edit(vim.fn.fnameescape(target))
   end
 end
 
