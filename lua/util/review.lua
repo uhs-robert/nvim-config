@@ -224,17 +224,27 @@ function M.start()
   M.state.files = files
   M.state.file_index = nil
 
-  local ok, gitsigns = pcall(require, "gitsigns")
-  if ok then gitsigns.change_base(base, true) end
-
-  if skipped_binaries > 0 then
-    notify(string.format("Skipped %d binary file(s)", skipped_binaries), vim.log.levels.INFO)
+  -- change_base() is async; opening the first file before its callback fires would
+  -- race config.base, causing a fresh buffer attach to pick up the OLD base and get
+  -- stuck there permanently (gitsigns never re-syncs an attached buffer's base later).
+  local function open_first()
+    if skipped_binaries > 0 then
+      notify(string.format("Skipped %d binary file(s)", skipped_binaries), vim.log.levels.INFO)
+    end
+    open_file_at_index(1)
+    nav_when_ready("first")
+    notify(string.format("Reviewing PR #%d: %s (%d files)", pr.number, pr.title, #files))
   end
 
-  open_file_at_index(1)
-  nav_when_ready("first")
-
-  notify(string.format("Reviewing PR #%d: %s (%d files)", pr.number, pr.title, #files))
+  local ok, gitsigns = pcall(require, "gitsigns")
+  if ok then
+    gitsigns.change_base(base, true, function(change_base_err)
+      if change_base_err then notify("Gitsigns error: " .. change_base_err, vim.log.levels.ERROR) end
+      vim.schedule(open_first)
+    end)
+  else
+    open_first()
+  end
 end
 
 function M.stop()
