@@ -19,10 +19,14 @@ local function system(cmd)
   return vim.trim(result), vim.v.shell_error
 end
 
+local git_root_cache = nil
+
 local function git_root()
+  if git_root_cache then return git_root_cache end
   local out, code = system({ "git", "rev-parse", "--show-toplevel" })
   if code ~= 0 or out == "" then return nil end
-  return out
+  git_root_cache = out
+  return git_root_cache
 end
 
 local function resolve_pr_target()
@@ -56,31 +60,60 @@ local function merge_base(base_ref)
   return out
 end
 
--- Returns a list of { path, status } entries, excluding binaries; also returns skipped-binary count.
-local function collect_changed_files(base)
-  local status_out, status_code = system({ "git", "diff", "--name-status", "-M", base, "HEAD" })
-  if status_code ~= 0 then return {}, 0 end
+-- vim.fn.system() mangles NUL bytes (turns them into 0x01), so -z output needs vim.system()
+-- instead, which returns the process's raw stdout untouched.
+local function system_raw(cmd)
+  local result = vim.system(cmd, { text = false }):wait()
+  return result.stdout or "", result.code
+end
 
-  local numstat_out = system({ "git", "diff", "--numstat", "-M", base, "HEAD" })
+-- Returns a list of { path, status } entries, excluding binaries; also returns skipped-binary count.
+-- Uses -z so a rename's old/new paths arrive as separate NUL fields (no "old => new" arrow string),
+-- keeping the numstat and name-status passes keyed on the same new-path string.
+local function collect_changed_files(base)
+  local status_out, status_code = system_raw({ "git", "diff", "--name-status", "-M", "-z", base, "HEAD" })
+  if status_code ~= 0 then return {}, 0 end
+  local numstat_out = select(1, system_raw({ "git", "diff", "--numstat", "-M", "-z", base, "HEAD" }))
+
   local binary_paths = {}
-  for line in numstat_out:gmatch("[^\n]+") do
-    local added, removed, path = line:match("^(%S+)\t(%S+)\t(.+)$")
-    if added == "-" and removed == "-" then binary_paths[path] = true end
+  local numstat_fields = vim.split(numstat_out, "\0", { plain = true })
+  local i = 1
+  while i <= #numstat_fields do
+    local added, removed, path = numstat_fields[i]:match("^(%S+)\t(%S+)\t(.*)$")
+    if added == nil then
+      i = i + 1
+    elseif path == "" then
+      -- rename: this record's path is empty; old path follows, then new path
+      path = numstat_fields[i + 2]
+      if added == "-" and removed == "-" then binary_paths[path] = true end
+      i = i + 3
+    else
+      if added == "-" and removed == "-" then binary_paths[path] = true end
+      i = i + 1
+    end
   end
 
   local files = {}
   local skipped_binaries = 0
-  if status_out ~= "" then
-    for line in status_out:gmatch("[^\n]+") do
-      local fields = {}
-      for field in line:gmatch("[^\t]+") do
-        table.insert(fields, field)
+  local status_fields = vim.split(status_out, "\0", { plain = true })
+  i = 1
+  while i <= #status_fields do
+    local status = status_fields[i]
+    if status == "" then
+      i = i + 1
+    else
+      local path
+      if status:match("^[RC]") then
+        path = status_fields[i + 2]
+        i = i + 3
+      else
+        path = status_fields[i + 1]
+        i = i + 2
       end
-      local status, path = fields[1], fields[#fields]
       if binary_paths[path] then
         skipped_binaries = skipped_binaries + 1
       else
-        table.insert(files, { path = path, status = status })
+        table.insert(files, { path = path, status = status:sub(1, 1) })
       end
     end
   end
@@ -93,10 +126,16 @@ local function root_relative(path)
   return root .. "/" .. path
 end
 
+-- The name nvim_buf_set_name gives a deleted-file scratch buffer: nvim normalizes any name
+-- passed to nvim_buf_set_name against cwd, so this must already be absolute to match later.
+local function deleted_scratch_name(path)
+  return root_relative(path) .. " (deleted)"
+end
+
 -- Realpath-based match: git_root() resolves symlinks, so a plain string
 -- comparison against a buffer opened through a symlinked path never matches.
 local function paths_match(buf_name, path)
-  if buf_name == root_relative(path) or buf_name == path .. " (deleted)" then return true end
+  if buf_name == root_relative(path) or buf_name == deleted_scratch_name(path) then return true end
   local uv = vim.uv or vim.loop
   local a, b = uv.fs_realpath(buf_name), uv.fs_realpath(root_relative(path))
   return a ~= nil and a == b
@@ -136,7 +175,18 @@ local function bind_review_keys(buf)
 end
 
 -- Opens a readonly scratch buffer with the file's content at the merge base, for deleted files.
+-- Reuses an existing scratch buffer for the same path instead of creating a new one, since
+-- nvim_buf_set_name errors when a name is already taken by another buffer.
 local function open_deleted_file(path)
+  local scratch_name = deleted_scratch_name(path)
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_get_name(buf) == scratch_name then
+      vim.api.nvim_win_set_buf(0, buf)
+      bind_review_keys(buf)
+      return
+    end
+  end
+
   local out, code = system({ "git", "show", M.state.base .. ":" .. path })
   if code ~= 0 then
     notify("Failed to read deleted file from merge base: " .. path, vim.log.levels.ERROR)
@@ -145,7 +195,7 @@ local function open_deleted_file(path)
 
   local buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(out, "\n"))
-  vim.api.nvim_buf_set_name(buf, path .. " (deleted)")
+  vim.api.nvim_buf_set_name(buf, scratch_name)
   vim.bo[buf].buftype = "nofile"
   vim.bo[buf].filetype = vim.filetype.match({ filename = path }) or ""
   vim.bo[buf].modifiable = false
@@ -190,6 +240,7 @@ function M.start()
     return
   end
 
+  git_root_cache = nil
   if not git_root() then
     notify("Not inside a git repository", vim.log.levels.ERROR)
     return
@@ -260,6 +311,7 @@ function M.stop()
   M.state.base = nil
   M.state.files = {}
   M.state.file_index = nil
+  git_root_cache = nil
 
   notify("Review mode stopped")
 end
