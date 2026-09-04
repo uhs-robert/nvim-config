@@ -50,6 +50,7 @@ return {
       },
       on_attach = function(buffer)
         local gs = package.loaded.gitsigns
+        local review = require("util.review")
 
         local function map(mode, l, r, desc)
           vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
@@ -72,6 +73,9 @@ return {
       end, "Prev Hunk")
       map("n", "]H", function() gs.nav_hunk("last") end, "Last Hunk")
       map("n", "[H", function() gs.nav_hunk("first") end, "First Hunk")
+      map("n", "]r", function() review.next_hunk() end, "Next Review Hunk")
+      map("n", "[r", function() review.prev_hunk() end, "Prev Review Hunk")
+      map("n", "<leader>gr", function() review.toggle() end, "Git Review")
       end,
     },
   },
