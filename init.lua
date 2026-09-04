@@ -11,11 +11,15 @@ local GITHUB_PATH = "/home/" .. DEV_USER .. "/Development"
 _G.local_plugin = function(name)
   if not ENABLE_LOCAL_DEV then return nil end
 
-  local path = GITHUB_PATH .. "/" .. name
-  if vim.fn.isdirectory(path) == 1 then return path end
+  local ok, path = pcall(function()
+    local p = GITHUB_PATH .. "/" .. name
+    if vim.fn.isdirectory(p) == 1 then return p end
 
-  local personal_path = GITHUB_PATH .. "/personal/" .. name
-  return vim.fn.isdirectory(personal_path) == 1 and personal_path or nil
+    local personal_path = GITHUB_PATH .. "/personal/" .. name
+    return vim.fn.isdirectory(personal_path) == 1 and personal_path or nil
+  end)
+
+  return ok and path or nil
 end
 
 -- Vim settings
