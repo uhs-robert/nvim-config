@@ -1,0 +1,386 @@
+-- Contextual PR review mode: reviews a PR's full delta in normal source buffers via Gitsigns,
+-- with cross-file [r/]r navigation. Git is authoritative for the diff; gh only supplies PR metadata.
+
+local M = {}
+
+M.state = {
+  active = false,
+  base = nil,
+  files = {},
+  file_index = nil,
+}
+
+local function notify(msg, level)
+  vim.notify(msg, level or vim.log.levels.INFO, { title = "Git Review", timeout = 5000 })
+end
+
+local function system(cmd)
+  local result = vim.fn.system(cmd)
+  return vim.trim(result), vim.v.shell_error
+end
+
+local git_root_cache = nil
+
+local function git_root()
+  if git_root_cache then return git_root_cache end
+  local out, code = system({ "git", "rev-parse", "--show-toplevel" })
+  if code ~= 0 or out == "" then return nil end
+  git_root_cache = out
+  return git_root_cache
+end
+
+local function resolve_pr_target()
+  local out, code = system({ "gh", "pr", "view", "--json", "number,title,baseRefName,headRefName" })
+  if code ~= 0 or out == "" then
+    return nil, "No pull request found for the current branch, or gh is unavailable/unauthenticated"
+  end
+  local ok, decoded = pcall(vim.json.decode, out)
+  if not ok or not decoded or not decoded.baseRefName then return nil, "Failed to parse PR metadata from gh" end
+  return decoded, nil
+end
+
+-- Resolves the base branch to a usable git revision, fetching from origin if needed.
+local function resolve_base_ref(base_branch)
+  local candidates = { base_branch, "origin/" .. base_branch }
+  for _, ref in ipairs(candidates) do
+    local _, code = system({ "git", "rev-parse", "--verify", ref })
+    if code == 0 then return ref end
+  end
+
+  system({ "git", "fetch", "origin", base_branch })
+  local origin_ref = "origin/" .. base_branch
+  local _, code = system({ "git", "rev-parse", "--verify", origin_ref })
+  if code == 0 then return origin_ref end
+  return nil
+end
+
+local function merge_base(base_ref)
+  local out, code = system({ "git", "merge-base", base_ref, "HEAD" })
+  if code ~= 0 or out == "" then return nil end
+  return out
+end
+
+-- vim.fn.system() mangles NUL bytes (turns them into 0x01), so -z output needs vim.system()
+-- instead, which returns the process's raw stdout untouched.
+local function system_raw(cmd)
+  local result = vim.system(cmd, { text = false }):wait()
+  return result.stdout or "", result.code
+end
+
+-- Returns a list of { path, status } entries, excluding binaries; also returns skipped-binary count.
+-- Uses -z so a rename's old/new paths arrive as separate NUL fields (no "old => new" arrow string),
+-- keeping the numstat and name-status passes keyed on the same new-path string.
+local function collect_changed_files(base)
+  local status_out, status_code = system_raw({ "git", "diff", "--name-status", "-M", "-z", base, "HEAD" })
+  if status_code ~= 0 then return {}, 0 end
+  local numstat_out = select(1, system_raw({ "git", "diff", "--numstat", "-M", "-z", base, "HEAD" }))
+
+  local binary_paths = {}
+  local numstat_fields = vim.split(numstat_out, "\0", { plain = true })
+  local i = 1
+  while i <= #numstat_fields do
+    local added, removed, path = numstat_fields[i]:match("^(%S+)\t(%S+)\t(.*)$")
+    if added == nil then
+      i = i + 1
+    elseif path == "" then
+      -- rename: this record's path is empty; old path follows, then new path
+      path = numstat_fields[i + 2]
+      if added == "-" and removed == "-" then binary_paths[path] = true end
+      i = i + 3
+    else
+      if added == "-" and removed == "-" then binary_paths[path] = true end
+      i = i + 1
+    end
+  end
+
+  local files = {}
+  local skipped_binaries = 0
+  local status_fields = vim.split(status_out, "\0", { plain = true })
+  i = 1
+  while i <= #status_fields do
+    local status = status_fields[i]
+    if status == "" then
+      i = i + 1
+    else
+      local path
+      if status:match("^[RC]") then
+        path = status_fields[i + 2]
+        i = i + 3
+      else
+        path = status_fields[i + 1]
+        i = i + 2
+      end
+      if binary_paths[path] then
+        skipped_binaries = skipped_binaries + 1
+      else
+        table.insert(files, { path = path, status = status:sub(1, 1) })
+      end
+    end
+  end
+  return files, skipped_binaries
+end
+
+local function root_relative(path)
+  local root = git_root()
+  if not root then return path end
+  return root .. "/" .. path
+end
+
+-- The name nvim_buf_set_name gives a deleted-file scratch buffer: nvim normalizes any name
+-- passed to nvim_buf_set_name against cwd, so this must already be absolute to match later.
+local function deleted_scratch_name(path)
+  return root_relative(path) .. " (deleted)"
+end
+
+-- Realpath-based match: git_root() resolves symlinks, so a plain string
+-- comparison against a buffer opened through a symlinked path never matches.
+local function paths_match(buf_name, path)
+  if buf_name == root_relative(path) or buf_name == deleted_scratch_name(path) then return true end
+  local uv = vim.uv or vim.loop
+  local a, b = uv.fs_realpath(buf_name), uv.fs_realpath(root_relative(path))
+  return a ~= nil and a == b
+end
+
+-- Finds a buffer already open for `path` (matched by realpath, so a symlinked
+-- cwd doesn't cause a duplicate buffer to be opened for the same file).
+local function find_existing_buf(path)
+  local uv = vim.uv or vim.loop
+  local target = uv.fs_realpath(root_relative(path))
+  if not target then return nil end
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_loaded(buf) then
+      local name = vim.api.nvim_buf_get_name(buf)
+      if name ~= "" and uv.fs_realpath(name) == target then return name end
+    end
+  end
+  return nil
+end
+
+-- Resolves the current buffer's position in state.files, self-healing if the user
+-- manually switched buffers instead of using [r/]r.
+local function current_file_index()
+  local buf_name = vim.api.nvim_buf_get_name(0)
+  for i, file in ipairs(M.state.files) do
+    if paths_match(buf_name, file.path) then return i end
+  end
+  return M.state.file_index
+end
+
+-- Buffer-local nav keymaps; needed on deleted-file scratch buffers since gitsigns
+-- never attaches to them (git.lua's on_attach covers ordinary file buffers).
+local function bind_review_keys(buf)
+  vim.keymap.set("n", "]r", M.next_hunk, { buffer = buf, desc = "Next Review Hunk" })
+  vim.keymap.set("n", "[r", M.prev_hunk, { buffer = buf, desc = "Prev Review Hunk" })
+  vim.keymap.set("n", "<leader>gr", M.toggle, { buffer = buf, desc = "Git Review" })
+end
+
+-- Opens a readonly scratch buffer with the file's content at the merge base, for deleted files.
+-- Reuses an existing scratch buffer for the same path instead of creating a new one, since
+-- nvim_buf_set_name errors when a name is already taken by another buffer.
+local function open_deleted_file(path)
+  local scratch_name = deleted_scratch_name(path)
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_get_name(buf) == scratch_name then
+      vim.api.nvim_win_set_buf(0, buf)
+      bind_review_keys(buf)
+      return
+    end
+  end
+
+  local out, code = system({ "git", "show", M.state.base .. ":" .. path })
+  if code ~= 0 then
+    notify("Failed to read deleted file from merge base: " .. path, vim.log.levels.ERROR)
+    return
+  end
+
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(out, "\n"))
+  vim.api.nvim_buf_set_name(buf, scratch_name)
+  vim.bo[buf].buftype = "nofile"
+  vim.bo[buf].filetype = vim.filetype.match({ filename = path }) or ""
+  vim.bo[buf].modifiable = false
+  vim.api.nvim_win_set_buf(0, buf)
+  bind_review_keys(buf)
+end
+
+local function open_file_at_index(index)
+  local file = M.state.files[index]
+  if not file then return end
+  M.state.file_index = index
+
+  if file.status == "D" then
+    open_deleted_file(file.path)
+  else
+    local target = find_existing_buf(file.path) or root_relative(file.path)
+    vim.cmd.edit(vim.fn.fnameescape(target))
+  end
+end
+
+-- Waits for gitsigns to finish attaching/diffing the buffer before navigating, since
+-- change_base()/attach are async and a fixed vim.schedule can fire before hunks exist.
+local function nav_when_ready(land, tries)
+  tries = tries or 20
+  vim.schedule(function()
+    local gs = package.loaded.gitsigns
+    if not gs then return end
+    local hunks = gs.get_hunks()
+    if (hunks and #hunks > 0) or tries <= 0 then
+      gs.nav_hunk(land)
+    else
+      vim.defer_fn(function()
+        nav_when_ready(land, tries - 1)
+      end, 50)
+    end
+  end)
+end
+
+function M.start()
+  if M.state.active then
+    notify("Review already active", vim.log.levels.WARN)
+    return
+  end
+
+  git_root_cache = nil
+  if not git_root() then
+    notify("Not inside a git repository", vim.log.levels.ERROR)
+    return
+  end
+
+  local pr, err = resolve_pr_target()
+  if not pr then
+    notify(err, vim.log.levels.ERROR)
+    return
+  end
+
+  local base_ref = resolve_base_ref(pr.baseRefName)
+  if not base_ref then
+    notify("Could not resolve target branch: " .. pr.baseRefName, vim.log.levels.ERROR)
+    return
+  end
+
+  local base = merge_base(base_ref)
+  if not base then
+    notify("Could not calculate merge base with " .. base_ref, vim.log.levels.ERROR)
+    return
+  end
+
+  local files, skipped_binaries = collect_changed_files(base)
+  if #files == 0 then
+    notify("No changes to review", vim.log.levels.INFO)
+    return
+  end
+
+  M.state.active = true
+  M.state.base = base
+  M.state.files = files
+  M.state.file_index = nil
+
+  -- change_base() is async; opening the first file before its callback fires would
+  -- race config.base, causing a fresh buffer attach to pick up the OLD base and get
+  -- stuck there permanently (gitsigns never re-syncs an attached buffer's base later).
+  local function open_first()
+    if skipped_binaries > 0 then
+      notify(string.format("Skipped %d binary file(s)", skipped_binaries), vim.log.levels.INFO)
+    end
+    open_file_at_index(1)
+    nav_when_ready("first")
+    notify(string.format("Reviewing PR #%d: %s (%d files)", pr.number, pr.title, #files))
+  end
+
+  local ok, gitsigns = pcall(require, "gitsigns")
+  if ok then
+    gitsigns.change_base(base, true, function(change_base_err)
+      if change_base_err then notify("Gitsigns error: " .. change_base_err, vim.log.levels.ERROR) end
+      vim.schedule(open_first)
+    end)
+  else
+    open_first()
+  end
+end
+
+function M.stop()
+  if not M.state.active then
+    notify("Review not active", vim.log.levels.WARN)
+    return
+  end
+
+  local ok, gitsigns = pcall(require, "gitsigns")
+  if ok then gitsigns.change_base(nil, true) end
+
+  M.state.active = false
+  M.state.base = nil
+  M.state.files = {}
+  M.state.file_index = nil
+  git_root_cache = nil
+
+  notify("Review mode stopped")
+end
+
+function M.toggle()
+  if M.state.active then
+    M.stop()
+  else
+    M.start()
+  end
+end
+
+-- Crosses into the file at M.state.files[index] and lands on its first or last hunk.
+local function jump_into_file(index, land)
+  open_file_at_index(index)
+  nav_when_ready(land)
+end
+
+function M.next_hunk()
+  if not M.state.active then
+    notify("Review not active", vim.log.levels.WARN)
+    return
+  end
+
+  local gs = package.loaded.gitsigns
+  local hunks = gs and gs.get_hunks() or nil
+  if hunks and #hunks > 0 then
+    local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
+    for _, hunk in ipairs(hunks) do
+      if hunk.added.start > cursor_line then
+        gs.nav_hunk("next")
+        return
+      end
+    end
+  end
+
+  local index = current_file_index() or 1
+  if index >= #M.state.files then
+    notify("End of review")
+    return
+  end
+  jump_into_file(index + 1, "first")
+end
+
+function M.prev_hunk()
+  if not M.state.active then
+    notify("Review not active", vim.log.levels.WARN)
+    return
+  end
+
+  local gs = package.loaded.gitsigns
+  local hunks = gs and gs.get_hunks() or nil
+  if hunks and #hunks > 0 then
+    local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
+    for i = #hunks, 1, -1 do
+      local hunk = hunks[i]
+      if hunk.added.start < cursor_line then
+        gs.nav_hunk("prev")
+        return
+      end
+    end
+  end
+
+  local index = current_file_index() or 1
+  if index <= 1 then
+    notify("Start of review")
+    return
+  end
+  jump_into_file(index - 1, "last")
+end
+
+return M
